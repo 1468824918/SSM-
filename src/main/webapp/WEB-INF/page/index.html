@@ -1,0 +1,65 @@
+﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title></title>
+        <script type="application/javascript" src="/jquery-3.2.1.js"></script>
+        <link type="text/css" rel="stylesheet" media="all" href="/styles/global.css" />
+        <link type="text/css" rel="stylesheet" media="all" href="/styles/global_color.css" />
+    </head>
+    <body class="index">
+        <!--导航区域开始-->
+        <div id="index_navi">
+            <ul id="menu">
+                <li><a href="index.html" class="index_on"></a></li>
+                <li><a id="role" href="#" class="role_off"></a></li>
+                <li><a href="#" onclick="admin_list()" class="admin_off"></a></li>
+                <li><a href="#" onclick="fee_list()" class="fee_off"></a></li>
+                <li><a href="#" onclick="account_list()" class="account_off"></a></li>
+                <li><a href="#" onclick="service_list()" class="service_off"></a></li>
+                <li><a href="#" onclick="bill_list()" class="bill_off"></a></li>
+                <li><a href="#" onclick="report_list()" class="report_off"></a></li>
+                <li><a href="#" onclick="user_info()" class="information_off"></a></li>
+                <li><a href="#" onclick="user_modi_pwd()" class="password_off"></a></li>
+            </ul>
+        </div>
+    <script>
+        $("#role").click(function () {
+            $.ajax({
+                url: "/role",
+                success: function (result) {
+                    if (result=="role"){
+                        window.location.href="role_1"
+                    }
+                }
+            })
+
+        })
+        function admin_list() {
+            window.location.href="admin_list"
+
+        }
+        function fee_list() {
+            window.location.href="fee_list"
+        }
+        function account_list() {
+            window.location.href="account_list"
+        }
+        function service_list() {
+            window.location.href="service_list"
+        }
+        function bill_list() {
+            window.location.href="bill_list"
+        }
+        function report_list() {
+            window.location.href="report_list"
+        }
+        function user_info() {
+            window.location.href="user_info"
+        }
+        function user_modi_pwd() {
+            window.location.href="user_modi_pwd"
+        }
+    </script>
+    </body>
+</html>

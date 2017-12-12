@@ -11,12 +11,30 @@
         <result column="telephone" property="telephone"/>
         <result column="email" property="email"/>
         <result column="enrolldate" property="enrollDate"/>
+        <association property="moduleInfo" javaType="ModuleInfo">
+            <id column="module_id" property="moduleId"/>
+            <result column="module_name" property="moduleName"/>
+        </association>
     </resultMap>
+
     <select id="findAdmin" resultMap="adminMap">
-        SELECT  * FROM admin_info WHERE admin_code=#{adminName}
+        SELECT  * FROM admin_info WHERE admin_code=#{adminCode}
+    </select>
+    <select id="findAllAdmin" resultType="com.lanou.sm.admin.domain.Admin" resultMap="adminMap">
+        SELECT
+            a.admin_id admin_id,
+            a.admin_code admin_code,
+            a.password password,
+            a.name name,
+            a.telephone telephone,
+            a.email email,
+            a.enrolldate enrolldate,
+            group_concat(mi.module_name SEPARATOR ',')
+                module_name
+        FROM admin_info a LEFT JOIN (role_info r , admin_role ar , role_module rm ,module_info mi)
+                ON a.admin_id = ar.admin_id and ar.role_id = r.role_id and r.role_id = rm.role_id
+                   AND rm.module_id = mi.module_id GROUP BY a.admin_id
     </select>
 
-    <select id="findAll" resultMap="adminMap">
-        SELECT * FROM admin_info
-    </select>
+
 </mapper>

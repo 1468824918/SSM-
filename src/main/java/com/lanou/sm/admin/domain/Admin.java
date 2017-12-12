@@ -1,33 +1,40 @@
 package com.lanou.sm.admin.domain;
 
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
+import com.lanou.sm.role.domain.ModuleInfo;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by dllo on 17/12/2.
  */
 public class Admin {
     private int adminId;
-
-    @NotBlank(message = "用户名不能为空")
-    @Length(min = 3,max = 8,message = "用户名在3到8个字符之间")
     private String adminCode;
-
-    @NotBlank(message = "密码不能为空")
-    @Length(min = 3,max = 8,message = "密码名在3到8个字符之间")
     private String password;
-
     private String adminName;
     private String telephone;
     private String email;
     private Date enrollDate;
+    private ModuleInfo moduleInfo;
+
+    public Admin(String adminCode, String password, String adminName, String telephone, String email, Date enrollDate) {
+        this.adminCode = adminCode;
+        this.password = password;
+        this.adminName = adminName;
+        this.telephone = telephone;
+        this.email = email;
+        this.enrollDate = enrollDate;
+    }
 
     public Admin() {
     }
 
-    public Admin(int adminId, String adminCode, String password, String adminName, String telephone, String email, Date enrollate) {
+    public Admin(String adminCode) {
+        this.adminCode = adminCode;
+    }
+
+    public Admin(int adminId, String adminCode, String password, String adminName, String telephone, String email, Date enrollDate) {
         this.adminId = adminId;
         this.adminCode = adminCode;
         this.password = password;
@@ -93,16 +100,25 @@ public class Admin {
         this.enrollDate = enrollDate;
     }
 
+    public ModuleInfo getModuleInfo() {
+        return moduleInfo;
+    }
+
+    public void setModuleInfo(ModuleInfo moduleInfo) {
+        this.moduleInfo = moduleInfo;
+    }
+
     @Override
     public String toString() {
         return "Admin{" +
                 "adminId=" + adminId +
-                ", adminCodde='" + adminCode + '\'' +
+                ", adminCode='" + adminCode + '\'' +
                 ", password='" + password + '\'' +
                 ", adminName='" + adminName + '\'' +
                 ", telephone='" + telephone + '\'' +
                 ", email='" + email + '\'' +
-                ", enrolldate=" + enrollDate +
+                ", enrollDate=" + enrollDate +
+                ", moduleInfo=" + moduleInfo +
                 '}';
     }
 }

@@ -2,13 +2,12 @@ package com.lanou.sm.admin.controller;
 
 import com.lanou.sm.admin.domain.Admin;
 import com.lanou.sm.admin.service.AdminService;
+import com.lanou.sm.admin.utils.AjaxResult;
 import com.lanou.sm.admin.utils.GetFieldsErrors;
 import com.lanou.sm.admin.utils.VerifyCode;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -34,46 +33,25 @@ public class AdminController {
         return "index";
     }
 
-    // 用户登录
+    /**
+     * 用户登录
+     * @param admin
+     * @param session
+     * @param code
+     * @return
+     */
     @RequestMapping("login")
-    public String login(@Validated Admin admin,
-                        BindingResult result,
-                        Model model,
-                        HttpServletRequest request,
-                        HttpSession session,
-                        String code) {
-        Admin admins = adminServices.findAdmin(admin.getAdminCode());
-        String codes = (String) session.getAttribute("code");
-        if ("".equals(admin.getAdminCode())) {
-            model.addAttribute("adminCodeError", GetFieldsErrors.getFieldsErrors(result, "adminCode"));
-            model.addAttribute("admin", admin);
-            return "login";
-        } else if (admin.getAdminCode().trim().length() < 3 || admin.getAdminCode().trim().length() > 8) {
-            model.addAttribute("adminCodeError", GetFieldsErrors.getFieldsErrors(result, "adminCode"));
-            model.addAttribute("admin", admin);
-            return "login";
-        } else if (admins==null ||admins.getAdminCode().equals(admin.getAdminName())) {
-            model.addAttribute("adminMsg", "对不起用户不存在");
-            return "login";
-        } else if ("".equals(admin.getPassword())) {
-            model.addAttribute("passwordError", GetFieldsErrors.getFieldsErrors(result, "password"));
-            return "login";
-        } else if (admin.getPassword().trim().length() < 3 || admin.getPassword().trim().length() > 8) {
-            model.addAttribute("passwordError", GetFieldsErrors.getFieldsErrors(result, "password"));
-            return "login";
-        }else if (!admins.getPassword().equals(admin.getPassword())){
-            model.addAttribute("passwordMsg", "密码输入有误请重新输入");
-            return "login";
-        }
-        else if ("".equals(code) || !code.equalsIgnoreCase(codes)) {
-            model.addAttribute("codeError", "验证码输入错误");
-            return "login";
-        }
-        model.addAttribute("admin", admin);
-        return "index";
+    @ResponseBody
+    public String login(Admin admin, HttpSession session, String code) {
+        return adminServices.findAdmin(admin,session,code);
     }
 
-    //验证码
+    /**
+     * 验证码
+     * @param response
+     * @param session
+     * @throws IOException
+     */
     @RequestMapping(value = "/getVerifyCode")
     public void getVerifyCode(HttpServletResponse response, HttpSession session) throws IOException {
         VerifyCode vc = new VerifyCode();
@@ -83,18 +61,9 @@ public class AdminController {
         VerifyCode.output(image, response.getOutputStream());
     }
 
-    //查询管理员
-    @RequestMapping("/role/role_list")
-    public String role_List(Model model) {
-        List<Admin> adminList = adminServices.findAll();
-        model.addAttribute("adminList",adminList);
-        return "/role/role_list";
+    @RequestMapping("findAllAdmin")
+    @ResponseBody
+    public AjaxResult findAll(){
+        return new AjaxResult(adminServices.findAllAdmin());
     }
-//    //JSON/XML
-//    @ResponseBody
-//    @RequestMapping("/getall")
-//    public Object jsonData() {
-//        return Arrays.asList("aaa","bbb","ccc");
-//    }
-
 }

@@ -11,8 +11,9 @@ import java.util.List;
 @Repository
 public interface AdminMapper {
     //管理员登录
-    Admin findAdmin(String adminName);
+    Admin findAdmin(Admin admin);
 
-    //角色管理
-    List<Admin> findAll();
+    List<Admin> findAllAdmin();
+
+
 }

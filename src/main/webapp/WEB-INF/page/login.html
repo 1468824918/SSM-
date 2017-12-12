@@ -1,0 +1,90 @@
+﻿﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link type="text/css" rel="stylesheet" media="all" href="/styles/global.css"/>
+    <link type="text/css" rel="stylesheet" media="all" href="/styles/global_color.css"/>
+    <script type="application/javascript" src="/jquery-3.2.1.js"></script>
+</head>
+<body class="index">
+<div class="login_box">
+    <table>
+        <tr>
+            <td class="login_info">账号：</td>
+            <td colspan="2"><input id="adminCode" name="adminCode" type="text" class="width150"/></td>
+            <td class="login_error_info">
+                <span id="s" class="required"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="login_info">密码：</td>
+            <td colspan="2"><input id="password" name="password" type="password" class="width150"/></td>
+            <td>
+                <span id="p" class="required"></span>
+            </td>
+        </tr>
+        <tr>
+            <td class="login_info">验证码：</td>
+            <td class="width70"><input id="code" name="code" type="text" class="width70"/></td>
+            <td><img id="verifyCodeImage" src="/getVerifyCode" alt="验证码" title="点击更换" onclick="changeImage()"/></td>
+            <td><span id="v" class="required"></span></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="login_button" colspan="2">
+                <a id="a" href="#"><img src="/images/login_btn.png"/></a>
+            </td>
+            <td><span class="required"></span></td>
+        </tr>
+    </table>
+</div>
+<script type="application/javascript">
+    function changeImage() {
+        $("#verifyCodeImage").attr("src", "/getVerifyCode?i=" + Math.random());
+    }
+    $("#a").click(function () {
+        var adminCode = $("#adminCode").val();
+        var password = $("#password").val();
+        var code = $("#code").val();
+        $.ajax({
+            url: "/login",
+            type: "POST",
+            data: {"adminCode": adminCode, "password": password, "code": code},
+            success: function (result) {
+                if (result == "adminCode") {
+                    document.getElementById('s').innerHTML = '<font style="color:red">用户名不能为空</font>'
+                }
+                else if (result == "adminMsg") {
+                    document.getElementById('s').innerHTML = '<font style="color:red">用户名不存在</font>'
+                }
+                else if (result == "adminCodeLength") {
+                    document.getElementById('s').innerHTML = '<font style="color:red">用户名在3到8个字符之间</font>'
+                }
+                else if (result == "Password") {
+                    $('#s').remove();
+                    document.getElementById('p').innerHTML = '<font style="color:red">密码不能为空</font>'
+                }
+                else if (result == "PasswordLength") {
+                    $('#s').remove();
+                    document.getElementById('p').innerHTML = '<font style="color:red">密码在3到8个字符之间</font>'
+                }
+                else if (result == "passwordMsg") {
+                    $('#s').remove();
+                    document.getElementById('p').innerHTML = '<font style="color:red">密码输入有误请重新输入</font>'
+                }
+                else if (result == "codeError") {
+                    $('#s').remove();
+                    document.getElementById('v').innerHTML = '<font style="color:red">验证码输入错误</font>'
+                }
+                else if (result == "index") {
+                    window.location.href = "skipIndex"
+                }
+            }
+        })
+
+    })
+</script>
+</body>
+</html>

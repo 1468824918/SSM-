@@ -1,0 +1,184 @@
+﻿﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link type="text/css" rel="stylesheet" media="all" href="/styles/global.css"/>
+    <link type="text/css" rel="stylesheet" media="all" href="/styles/global_color.css"/>
+    <script language="javascript" type="text/javascript" src="/jquery-3.2.1.js">
+
+
+    </script>
+</head>
+<body>
+<!--Logo区域开始-->
+<div id="header">
+    <img src="/images/logo.png" alt="logo" class="left"/>
+    <a href="#">[退出]</a>
+</div>
+<!--Logo区域结束-->
+<!--导航区域开始-->
+<div id="navi">
+    <ul id="menu">
+        <li><a href="../index.html" class="index_off"></a></li>
+        <li><a id="role" href="#" class="role_on"></a></li>
+        <li><a href="#" onclick="admin_list()" class="admin_off"></a></li>
+        <li><a href="#" onclick="fee_list()" class="fee_off"></a></li>
+        <li><a href="#" onclick="account_list()" class="account_off"></a></li>
+        <li><a href="#" onclick="service_list()" class="service_off"></a></li>
+        <li><a href="#" onclick="bill_list()" class="bill_off"></a></li>
+        <li><a href="#" onclick="report_list()" class="report_off"></a></li>
+        <li><a href="#" onclick="user_info()" class="information_off"></a></li>
+        <li><a href="#" onclick="user_modi_pwd()" class="password_off"></a></li>
+    </ul>
+</div>
+<!--导航区域结束-->
+<!--主要区域开始-->
+<div id="main">
+    <form action="" method="">
+        <!--查询-->
+        <div class="search_add">
+            <input type="button" value="增加" class="btn_add" onclick="insertRole(this)"/>
+        </div>
+        <!--删除的操作提示-->
+        <div id="operate_result_info" class="operate_success">
+            <img src="/images/close.png" onclick="this.parentNode.style.display='none';"/>
+            删除成功！
+        </div> <!--删除错误！该角色被使用，不能删除。-->
+        <!--数据区域：用表格展示数据-->
+        <div id="data">
+            <table id="datalist">
+                <tr>
+                    <th>角色 ID</th>
+                    <th>角色名称</th>
+                    <th class="width600">拥有的权限</th>
+                    <th id="th" class="td_modi"></th>
+                </tr>
+            </table>
+        </div>
+        <!--分页-->
+        <div id="pages">
+            <a href="#">上一页</a>
+            <a href="#" class="current_page">1</a>
+            <a href="#">2</a>
+            <a href="#">3</a>
+            <a href="#">4</a>
+            <a href="#">5</a>
+            <a href="#">下一页</a>
+        </div>
+    </form>
+</div>
+<!--主要区域结束-->
+<div id="footer">
+    <p>[源自北美的技术，最优秀的师资，最真实的企业环境，最适用的实战项目]</p>
+    <p>版权所有(C)云科技有限公司 </p>
+</div>
+<script type="application/javascript">
+    //添加角色
+    $(document).ready(function () {
+        $.ajax({
+            url: "/role_list",
+            success: function (result) {
+                if (result.code == "0") {
+                    for (var i = 0; i < result.data.length; i++) {
+                        var role = result.data[i];
+                        if (null != role.moduleInfo) {
+                            var roleId = $("<td id='roleId'></td>").text(role.roleId);
+                            var roleName = $("<td></td>").text(role.roleName);
+                            var moduleName = $("<td></td>").text(role.moduleInfo.moduleName);
+                            var p = $("<td></td>").append('<input id="update" type="button" onclick="updateRole(this)" value="修改" class="btn_modify"/>' + '<input onclick="deleteRole(this)"  type="button" value="删除" class="btn_delete" />');
+                            var tr = $("<tr id='tr'></tr>").append(roleId).append(roleName).append(moduleName).append(p);
+                            $("#datalist").append(tr)
+                        } else {
+                            var roleId = $("<td></td>").text(role.roleId);
+                            var roleName = $("<td></td>").text(role.roleName);
+                            var moduleName = $("<td></td>");
+                            var p = $("<td></td>").append('<input id="update" type="button" onclick="updateRole(this)" value="修改" class="btn_modify"/>' + '<input id="delete" onclick="deleteRole(this)"  type="button" value="删除" class="btn_delete" />');
+                            var tr = $("<tr></tr>").append(roleId).append(roleName).append(moduleName).append(p);
+                            $("#datalist").append(tr)
+                        }
+                    }
+                }
+            }
+        })
+    });
+    //修改角色
+    function updateRole() {
+        $("#datalist tr").click(function () {
+            var td = $(this).find("td");
+            var data = td.eq(1).html();
+            alert(data)
+        window.location ='role_modi.html?name='+data;
+        });
+    }
+    //删除角色
+    function deleteRole() {
+        var r = window.confirm("确定要删除此角色吗？");
+        //以jquery为例实现点击某行获得某个td的数据
+        $("#datalist tr").click(function () {
+
+            //给每行绑定了一个点击事件
+            var td = $(this).find("td");
+
+            //this指向了当前点击的行，通过find我们获得了该行所有的td对象
+            //题中说到某个td，为了演示所以我们假设是要获得第几个td的数据
+
+            //通过eq可以得到具体的某个td对象，从而得到相应的数据
+            var data = td.eq(0).html();
+            $.ajax({
+                url: "/deleteRole",
+                data: {
+                    "roleId": data
+                },
+                success: function (result) {
+                    if (result == "success") {
+                        window.location.href = "role_1"
+//                        document.getElementById("operate_result_info").style.display = "block";
+                    }
+                }
+            })
+
+        });
+    }
+    function insertRole() {
+        window.location.href = "role_add"
+    }
+    $("#role").click(function () {
+        $.ajax({
+            url: "/role",
+            success: function (result) {
+                if (result == "role") {
+                    window.location.href = "role_1"
+                }
+            }
+        })
+
+    });
+    function admin_list() {
+        window.location.href = "admin_list"
+
+    }
+    function fee_list() {
+        window.location.href = "fee_list"
+    }
+    function account_list() {
+        window.location.href = "account_list"
+    }
+    function service_list() {
+        window.location.href = "service_list"
+    }
+    function bill_list() {
+        window.location.href = "bill_list"
+    }
+    function report_list() {
+        window.location.href = "report_list"
+    }
+    function user_info() {
+        window.location.href = "user_info"
+    }
+    function user_modi_pwd() {
+        window.location.href = "user_modi_pwd"
+    }
+</script>
+</body>
+</html>
