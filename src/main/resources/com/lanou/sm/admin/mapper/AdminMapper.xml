@@ -16,24 +16,96 @@
             <result column="module_name" property="moduleName"/>
         </association>
     </resultMap>
-
+    <resultMap id="roleMap" type="roleInfo" extends="adminMap">
+        <id column="role_id" property="roleId"/>
+        <result column="role_name" property="roleName"/>
+        <collection property="moduleInfo" ofType="moduleInfo">
+            <id column="module_id" property="moduleId"/>
+            <result column="module_name" property="moduleName"/>
+        </collection>
+    </resultMap>
+    <resultMap id="adminRoleMap" type="adminRole">
+        <id column="admin_id" property="adminId"/>
+        <id column="role_id" property="roleId"/>
+    </resultMap>
+    <insert id="insertAdmin">
+        INSERT INTO admin_info
+        VALUES (#{adminId}, #{adminCode}, #{password}, #{adminName}, #{telephone}, #{email}, #{enrollDate})
+    </insert>
+    <insert id="insertRoleInfo" parameterType="com.lanou.sm.role.domain.RoleInfo" useGeneratedKeys="true">
+        <selectKey keyProperty="roleId" order="AFTER" resultType="int">
+            SELECT last_insert_id()
+        </selectKey>
+        INSERT INTO role_info VALUES (#{roleId},#{roleName})
+    </insert>
+    <insert id="insertAdminRole">
+        INSERT INTO admin_role VALUES (#{arg0}, #{arg1})
+    </insert>
+    <delete id="deleteAdmin">
+        DELETE FROM admin_info
+        WHERE admin_id = #{adminId}
+    </delete>
+    <delete id="deleteAdmin_role">
+        DELETE FROM admin_role WHERE role_id IN
+            <if test="list != null and list.size() > 0">
+                <foreach collection="list" item="role" open="(" close=")" separator=",">
+                    #{role.roleId}
+                </foreach>
+            </if>
+    </delete>
+    <delete id="deleteRole_Info">
+        DELETE FROM role_info WHERE role_id IN
+        <if test="list != null and list.size() > 0">
+            <foreach collection="list" item="role" open="(" close=")" separator=",">
+                #{role.roleId}
+            </foreach>
+        </if>
+    </delete>
+    <delete id="deleteRoleModule">
+        DELETE FROM role_module WHERE role_id IN
+        <if test="list != null and list.size() > 0">
+            <foreach collection="list" item="role" open="(" close=")" separator=",">
+                #{role.roleId}
+            </foreach>
+        </if>
+    </delete>
     <select id="findAdmin" resultMap="adminMap">
-        SELECT  * FROM admin_info WHERE admin_code=#{adminCode}
+        SELECT *
+        FROM admin_info
+        WHERE admin_code = #{adminCode}
     </select>
     <select id="findAllAdmin" resultType="com.lanou.sm.admin.domain.Admin" resultMap="adminMap">
         SELECT
-            a.admin_id admin_id,
+            a.admin_id   admin_id,
             a.admin_code admin_code,
-            a.password password,
-            a.name name,
-            a.telephone telephone,
-            a.email email,
+            a.password   password,
+            a.name       name,
+            a.telephone  telephone,
+            a.email      email,
             a.enrolldate enrolldate,
             group_concat(mi.module_name SEPARATOR ',')
-                module_name
-        FROM admin_info a LEFT JOIN (role_info r , admin_role ar , role_module rm ,module_info mi)
-                ON a.admin_id = ar.admin_id and ar.role_id = r.role_id and r.role_id = rm.role_id
-                   AND rm.module_id = mi.module_id GROUP BY a.admin_id
+                         module_name
+        FROM admin_info a LEFT JOIN (role_info r, admin_role ar, role_module rm, module_info mi)
+                ON a.admin_id = ar.admin_id
+                   AND ar.role_id = r.role_id
+                   AND r.role_id = rm.role_id
+                   AND rm.module_id = mi.module_id
+        GROUP BY a.admin_id
+    </select>
+    <select id="findInsertAdmin" resultType="com.lanou.sm.admin.domain.Admin" resultMap="adminMap">
+        SELECT *
+        FROM admin_info
+        WHERE name = #{adminName}
+    </select>
+    <select id="findInsertRoleInfo" resultType="com.lanou.sm.role.domain.RoleInfo" resultMap="roleMap">
+        SELECT *
+        FROM role_info
+        WHERE role_id = #{roleId};
+    </select>
+    <select id="findAdminAndRole" resultType="com.lanou.sm.admin.domain.AdminRole" resultMap="adminRoleMap">
+        SELECT *
+        FROM admin_role
+        WHERE admin_id = #{adminId}
     </select>
 
 

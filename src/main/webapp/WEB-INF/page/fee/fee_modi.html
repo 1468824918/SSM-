@@ -5,7 +5,7 @@
         <title></title>
         <link type="text/css" rel="stylesheet" media="all" href="../styles/global.css" />
         <link type="text/css" rel="stylesheet" media="all" href="../styles/global_color.css" />
-        <script language="javascript" type="text/javascript">
+        <script language="javascript" type="text/javascript" src="/jquery-3.2.1.js">
             //保存结果的提示
             function showResult() {
                 showResultDiv(true);
@@ -64,15 +64,15 @@
         <div id="navi">
             <ul id="menu">
                 <li><a href="../index.html" class="index_off"></a></li>
-                <li><a href="../role/role_list.html" class="role_off"></a></li>
-                <li><a href="../admin/admin_list.html" class="admin_off"></a></li>
-                <li><a href="fee_list.html" class="fee_on"></a></li>
-                <li><a href="../account/account_list.html" class="account_off"></a></li>
-                <li><a href="../service/service_list.html" class="service_off"></a></li>
-                <li><a href="../bill/bill_list.html" class="bill_off"></a></li>
-                <li><a href="../report/report_list.html" class="report_off"></a></li>
-                <li><a href="../user/user_info.html" class="information_off"></a></li>
-                <li><a href="../user/user_modi_pwd.html" class="password_off"></a></li>
+                <li><a href="#" onclick="role_ist()" class="role_off"></a></li>
+                <li><a href="#" onclick="admin_list()" class="admin_off"></a></li>
+                <li><a href="#" onclick="fee_list()" class="fee_off"></a></li>
+                <li><a href="#" onclick="account_list()" class="account_off"></a></li>
+                <li><a href="#" onclick="service_list()" class="service_off"></a></li>
+                <li><a href="#" onclick="bill_list()" class="bill_off"></a></li>
+                <li><a href="#" onclick="report_list()" class="report_off"></a></li>
+                <li><a href="#" onclick="user_info()" class="information_off"></a></li>
+                <li><a href="#" onclick="user_modi_pwd()" class="password_off"></a></li>
             </ul>
         </div>
         <!--导航区域结束-->
@@ -136,5 +136,36 @@
             <br />
             <span>版权所有(C)云科技有限公司 </span>
         </div>
+        <script type="application/javascript">
+            function role_ist() {
+                window.location.href = "role_1"
+
+            }
+            function admin_list() {
+                window.location.href = "admin_list"
+
+            }
+            function fee_list() {
+                window.location.href = "fee_list"
+            }
+            function account_list() {
+                window.location.href = "account_list"
+            }
+            function service_list() {
+                window.location.href = "service_list"
+            }
+            function bill_list() {
+                window.location.href = "bill_list"
+            }
+            function report_list() {
+                window.location.href = "report_list"
+            }
+            function user_info() {
+                window.location.href = "user_info"
+            }
+            function user_modi_pwd() {
+                window.location.href = "user_modi_pwd"
+            }
+        </script>
     </body>
 </html>

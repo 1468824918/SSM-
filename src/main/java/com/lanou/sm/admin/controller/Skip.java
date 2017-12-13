@@ -76,10 +76,8 @@ public class Skip {
         return "user/user_modi_pwd";
     }
 
-    @RequestMapping("updateRole")
-    @ResponseBody
-    public String updateRole(String name){
-        String s = name;
-        return s;
+    @RequestMapping("admin_add")
+    public String admin_add(){
+        return "admin/admin_add";
     }
 }

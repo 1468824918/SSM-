@@ -58,6 +58,12 @@ public class RoleController {
         return roleService.deleteRole(roleInfo);
     }
 
+    /**
+     * 修改
+     * @param roleInfo
+     * @param moduleId
+     * @return
+     */
     @RequestMapping("/updateRoleInfo")
     @ResponseBody
     public String updateRole(RoleInfo roleInfo, String[] moduleId) {

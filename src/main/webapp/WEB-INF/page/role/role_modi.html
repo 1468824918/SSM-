@@ -92,7 +92,8 @@
         if (pos_end == -1) {
             var url=decodeURI(window.location);
             var tmp1=url.split("?")[1];
-            document.getElementById("inp").value =decodeURI(tmp1.slice(5,10));
+            var tmp2=url.split("?")[2];
+            document.getElementById("inp").value =decodeURI(tmp1.slice(5,20));
         } else {
             alert("没有此值~~");
         }
@@ -109,7 +110,8 @@
             type: "POST",
             data: {
                 "roleName": roleName,
-                "moduleId": [checkID]
+                "roleId":tmp2,
+                "moduleId": [checkID],
             },
             traditional: true,
             success: function (result) {

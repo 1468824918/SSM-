@@ -1,7 +1,9 @@
 package com.lanou.sm.admin.domain;
 
 import com.lanou.sm.role.domain.ModuleInfo;
+import com.lanou.sm.role.domain.RoleInfo;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -17,6 +19,11 @@ public class Admin {
     private String email;
     private Date enrollDate;
     private ModuleInfo moduleInfo;
+    private RoleInfo[] roleInfo;
+
+    public Admin(Date enrollDate) {
+        this.enrollDate = enrollDate;
+    }
 
     public Admin(String adminCode, String password, String adminName, String telephone, String email, Date enrollDate) {
         this.adminCode = adminCode;
@@ -108,6 +115,14 @@ public class Admin {
         this.moduleInfo = moduleInfo;
     }
 
+    public RoleInfo[] getRoleInfo() {
+        return roleInfo;
+    }
+
+    public void setRoleInfo(RoleInfo[] roleInfo) {
+        this.roleInfo = roleInfo;
+    }
+
     @Override
     public String toString() {
         return "Admin{" +
@@ -119,6 +134,7 @@ public class Admin {
                 ", email='" + email + '\'' +
                 ", enrollDate=" + enrollDate +
                 ", moduleInfo=" + moduleInfo +
+                ", roleInfo=" + Arrays.toString(roleInfo) +
                 '}';
     }
 }

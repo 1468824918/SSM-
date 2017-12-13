@@ -20,11 +20,6 @@
                 alert("请至少选择一条数据！");
                 //document.getElementById("operate_result_info").style.display = "block";
             }
-            //删除
-            function deleteAdmin() {
-                var r = window.confirm("确定要删除此管理员吗？");
-                document.getElementById("operate_result_info").style.display = "block";
-            }
             //全选
             function selectAdmins(inputObj) {
                 var inputArray = document.getElementById("datalist").getElementsByTagName("input");
@@ -80,7 +75,7 @@
                     <div>角色：<input type="text" value="" class="text_search width200" /></div>
                     <div><input type="button" value="搜索" class="btn_search"/></div>
                     <input type="button" value="密码重置" class="btn_add" onclick="resetPwd();" />
-                    <input type="button" value="增加" class="btn_add" onclick="location.href='admin_add.html';" />
+                    <input type="button" value="增加" class="btn_add" onclick="add(this)" />
                 </div>
                 <!--删除和密码重置的操作提示-->
                 <div id="operate_result_info" class="operate_fail">
@@ -189,7 +184,40 @@
                     }
                 }
             })
-        })
+        });
+        //删除角色
+        function deleteRole() {
+            var r = window.confirm("确定要删除此角色吗？");
+            //以jquery为例实现点击某行获得某个td的数据
+            $("#datalist tr").click(function () {
+
+                //给每行绑定了一个点击事件
+                var td = $(this).find("td");
+
+                //this指向了当前点击的行，通过find我们获得了该行所有的td对象
+                //题中说到某个td，为了演示所以我们假设是要获得第几个td的数据
+
+                //通过eq可以得到具体的某个td对象，从而得到相应的数据
+                var data = td.eq(0).html();
+                alert(data)
+                $.ajax({
+                    url: "/deleteAdmin",
+                    data: {
+                        "adminId": data
+                    },
+                    success: function (result) {
+                        if (result == "success") {
+                            window.location.href = "admin_list"
+//                        document.getElementById("operate_result_info").style.display = "block";
+                        }
+                    }
+                })
+
+            });
+        }
+        function add() {
+            window.location.href ='admin_add';
+        }
         function role_ist() {
             window.location.href = "role_1"
 

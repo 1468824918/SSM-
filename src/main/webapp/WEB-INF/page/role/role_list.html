@@ -107,8 +107,8 @@
         $("#datalist tr").click(function () {
             var td = $(this).find("td");
             var data = td.eq(1).html();
-            alert(data)
-        window.location ='role_modi.html?name='+data;
+            var d = td.eq(0).html();
+        window.location ='role_modi.html?name='+data + "?" +d ;
         });
     }
     //删除角色

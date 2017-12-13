@@ -26,13 +26,13 @@
         DELETE  FROM role_module WHERE role_id=#{roleId}
     </delete>
     <delete id="deleteUpdateRole">
-        DELETE FROM role_info WHERE role_name=#{roleName}
+        DELETE FROM role_info WHERE role_id=#{roleId}
     </delete>
 
     <select id="findRoleInfo" resultMap="roleMap">
         SELECT *
         FROM role_info
-        WHERE role_name = #{roleName}
+        WHERE role_id = #{roleId}
     </select>
 
     <select id="findAll" resultMap="roleMap">

@@ -5,6 +5,7 @@ import com.lanou.sm.admin.service.AdminService;
 import com.lanou.sm.admin.utils.AjaxResult;
 import com.lanou.sm.admin.utils.GetFieldsErrors;
 import com.lanou.sm.admin.utils.VerifyCode;
+import com.lanou.sm.role.domain.RoleInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -15,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -61,9 +63,31 @@ public class AdminController {
         VerifyCode.output(image, response.getOutputStream());
     }
 
+    /**
+     * 管理员查询(五表联查)
+     * @return
+     */
     @RequestMapping("findAllAdmin")
     @ResponseBody
     public AjaxResult findAll(){
         return new AjaxResult(adminServices.findAllAdmin());
+    }
+
+    /**
+     * 插入管理员
+     * @param admin
+     * @param againPassword
+     * @return
+     */
+    @RequestMapping("insertAdminAndRoleInfo")
+    @ResponseBody
+    public String insertAdmin(Admin admin ,String againPassword){
+        return adminServices.insertAdmin(admin,againPassword);
+    }
+
+    @RequestMapping("deleteAdmin")
+    @ResponseBody
+    public String deleteAdmin(Admin admin){
+        return adminServices.deleteAdmin(admin);
     }
 }

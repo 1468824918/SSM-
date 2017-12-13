@@ -29,7 +29,6 @@ public interface RoleMapper {
     //删除中间表id
     int deleteRoleModule(RoleInfo roleInfo);
 
-
     //删除要修改的人,根据名字删除
     int deleteUpdateRole(RoleInfo roleInfo);
 
