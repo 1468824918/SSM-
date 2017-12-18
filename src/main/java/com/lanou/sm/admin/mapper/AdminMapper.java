@@ -5,6 +5,7 @@ import com.lanou.sm.admin.domain.AdminRole;
 import com.lanou.sm.role.domain.ModuleInfo;
 import com.lanou.sm.role.domain.RoleInfo;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.context.annotation.Role;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -37,21 +38,41 @@ public interface AdminMapper {
 
 
 
-    //查询中间表的id(根据管理员id)(admin_role)
-    List<AdminRole> findAdminAndRole(Admin admin);
-
     //删除管理员
     int deleteAdmin(Admin admin);
-
-    //删除中间(admin_role)表
-    int deleteAdmin_role(List<AdminRole> adminRole);
-
-    //删除角色(role_Info)表
-    int deleteRole_Info(List<AdminRole> adminRole);
 
     //删除(role_module)表
     int deleteRoleModule(List<AdminRole> adminRole);
 
+
+
+
+    //删除中间(admin_role)表
+    int deleteAdmin_role(Admin admin);
+
+    //删除角色(role_Info)表
+    int deleteRole_Info( List<AdminRole> adminRole);
+
+
+
+
+    //修改管理员
+    int updateAdmin(Admin admin);
+
+    //查询中间表的id(根据管理员id)(admin_role)
+    List<AdminRole> findAdminAndRole(Admin admin);
+
+
+    //查询权限
+    List<ModuleInfo> findModule_info();
+
+
+    //模糊查询
+    List<Admin> likeAdmin( ModuleInfo moduleInfo,@Param("roleName") String roleName);
+
+
+    //查询角色role_info表
+    List<RoleInfo> findAllRole_info();
 
 
 

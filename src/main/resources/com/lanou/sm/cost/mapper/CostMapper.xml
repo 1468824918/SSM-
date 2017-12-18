@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanou.sm.cost.mapper.CostMapper">
+    <resultMap id="costMap" type="Cost">
+        <id column="cost_id" property="costId"/>
+        <result column="name" property="costName"/>
+        <result column="base_duration" property="base_duration"/>
+        <result column="base_cost" property="base_cost"/>
+        <result column="unit_cost" property="unit_cost"/>
+        <result column="status" property="status"/>
+        <result column="descr" property="descr"/>
+        <result column="creatime" property="creaTime"/>
+        <result column="startime" property="starTime"/>
+        <result column="cost_type" property="cost_type"/>
+    </resultMap>
+    <update id="update">
+        UPDATE cost s SET s.status=1 where s.cost_id=#{costId}
+    </update>
+    <delete id="deleteCost">
+        DELETE  FROM cost WHERE cost_id=#{costId}
+    </delete>
+    <select id="findAllCost" resultType="com.lanou.sm.cost.domain.Cost" resultMap="costMap">
+        SELECT * FROM cost
+    </select>
+</mapper>

@@ -15,19 +15,42 @@
             <id column="module_id" property="moduleId"/>
             <result column="module_name" property="moduleName"/>
         </association>
+        <collection property="adminRole" ofType="adminRole">
+            <id column="admin_id" property="adminId"/>
+            <id column="role_id" property="roleId"/>
+        </collection>
+        <collection property="roleInfoList" ofType="roleInfo">
+            <id column="role_id" property="roleId"/>
+            <result column="role_name" property="roleName"/>
+        </collection>
     </resultMap>
-    <resultMap id="roleMap" type="roleInfo" extends="adminMap">
+    <resultMap id="roleMap" type="roleInfo">
         <id column="role_id" property="roleId"/>
         <result column="role_name" property="roleName"/>
         <collection property="moduleInfo" ofType="moduleInfo">
             <id column="module_id" property="moduleId"/>
             <result column="module_name" property="moduleName"/>
         </collection>
+        <collection property="adminRole" ofType="adminRole">
+            <id column="admin_id" property="adminId"/>
+            <id column="role_id" property="roleId"/>
+        </collection>
     </resultMap>
-    <resultMap id="adminRoleMap" type="adminRole">
+    <resultMap id="adminRole" type="adminRole">
         <id column="admin_id" property="adminId"/>
         <id column="role_id" property="roleId"/>
     </resultMap>
+
+    <resultMap id="moduleInfo" type="moduleInfo">
+        <id column="module_id" property="moduleId"/>
+        <result column ="module_name" property="moduleName"/>
+        <association property="roleInfo" javaType="roleInfo">
+            <id column="role_id" property="roleId"/>
+            <result column="role_name" property="roleName"/>
+        </association>
+    </resultMap>
+
+
     <insert id="insertAdmin">
         INSERT INTO admin_info
         VALUES (#{adminId}, #{adminCode}, #{password}, #{adminName}, #{telephone}, #{email}, #{enrollDate})
@@ -39,19 +62,26 @@
         INSERT INTO role_info VALUES (#{roleId},#{roleName})
     </insert>
     <insert id="insertAdminRole">
-        INSERT INTO admin_role VALUES (#{arg0}, #{arg1})
+        INSERT INTO admin_role VALUES (#{0}, #{1})
     </insert>
+    <update id="updateAdmin">
+        UPDATE admin_info
+        <set>
+            <if test="adminCode != null and adminCode != ''">admin_code=#{adminCode},</if>
+            <if test="password != null and password != ''">password=#{password},</if>
+            <if test="adminName != null and adminName != ''">name=#{adminName},</if>
+            <if test="telephone != null and telephone != ''">telephone=#{telephone},</if>
+            <if test="email != null and email != ''">email=#{email},</if>
+            enrolldate=#{enrollDate},
+        </set>
+        where admin_id =#{adminId}
+    </update>
     <delete id="deleteAdmin">
         DELETE FROM admin_info
         WHERE admin_id = #{adminId}
     </delete>
-    <delete id="deleteAdmin_role">
-        DELETE FROM admin_role WHERE role_id IN
-            <if test="list != null and list.size() > 0">
-                <foreach collection="list" item="role" open="(" close=")" separator=",">
-                    #{role.roleId}
-                </foreach>
-            </if>
+    <delete id="deleteAdmin_role" parameterType="list">
+        DELETE FROM admin_role WHERE admin_id=#{adminId}
     </delete>
     <delete id="deleteRole_Info">
         DELETE FROM role_info WHERE role_id IN
@@ -61,7 +91,7 @@
             </foreach>
         </if>
     </delete>
-    <delete id="deleteRoleModule">
+    <delete id="deleteRoleModule" parameterType="list">
         DELETE FROM role_module WHERE role_id IN
         <if test="list != null and list.size() > 0">
             <foreach collection="list" item="role" open="(" close=")" separator=",">
@@ -83,13 +113,11 @@
             a.telephone  telephone,
             a.email      email,
             a.enrolldate enrolldate,
-            group_concat(mi.module_name SEPARATOR ',')
-                         module_name
-        FROM admin_info a LEFT JOIN (role_info r, admin_role ar, role_module rm, module_info mi)
+            group_concat(r.role_name SEPARATOR ',')
+                         role_name
+        FROM admin_info a LEFT JOIN (role_info r, admin_role ar)
                 ON a.admin_id = ar.admin_id
                    AND ar.role_id = r.role_id
-                   AND r.role_id = rm.role_id
-                   AND rm.module_id = mi.module_id
         GROUP BY a.admin_id
     </select>
     <select id="findInsertAdmin" resultType="com.lanou.sm.admin.domain.Admin" resultMap="adminMap">
@@ -102,11 +130,37 @@
         FROM role_info
         WHERE role_id = #{roleId};
     </select>
-    <select id="findAdminAndRole" resultType="com.lanou.sm.admin.domain.AdminRole" resultMap="adminRoleMap">
+    <select id="findAdminAndRole" resultType="com.lanou.sm.admin.domain.AdminRole" resultMap="adminRole">
         SELECT *
         FROM admin_role
         WHERE admin_id = #{adminId}
     </select>
-
+    <select id="findModule_info" resultType="com.lanou.sm.role.domain.ModuleInfo" resultMap="moduleInfo">
+        SELECT * FROM module_info
+    </select>
+    <select id="likeAdmin" resultMap="adminMap" >
+        SELECT
+            a.admin_id   admin_id,
+            a.admin_code admin_code,
+            a.password   password,
+            a.name       name,
+            a.telephone  telephone,
+            a.email      email,
+            a.enrolldate enrolldate,
+            group_concat(mi.module_name SEPARATOR ',')
+                         module_name,
+            group_concat(r.role_name SEPARATOR',')
+                         role_name
+        FROM admin_info a LEFT JOIN (role_info r, admin_role ar, role_module rm, module_info mi)
+                ON a.admin_id = ar.admin_id
+                   AND ar.role_id = r.role_id
+                   AND r.role_id = rm.role_id
+                   AND rm.module_id = mi.module_id
+                   AND mi.module_name=#{0.moduleName} AND r.role_name LIKE  '%${roleName}%'
+        GROUP BY a.admin_id;
+    </select>
+    <select id="findAllRole_info" resultType="com.lanou.sm.role.domain.RoleInfo" resultMap="roleMap">
+        SELECT * FROM role_info GROUP BY role_name HAVING count(role_name)
+    </select>
 
 </mapper>

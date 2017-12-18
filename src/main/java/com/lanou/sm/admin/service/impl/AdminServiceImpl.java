@@ -4,6 +4,7 @@ import com.lanou.sm.admin.domain.Admin;
 import com.lanou.sm.admin.domain.AdminRole;
 import com.lanou.sm.admin.mapper.AdminMapper;
 import com.lanou.sm.admin.service.AdminService;
+import com.lanou.sm.role.domain.ModuleInfo;
 import com.lanou.sm.role.domain.RoleInfo;
 import com.lanou.sm.role.mapper.RoleMapper;
 import com.lanou.sm.role.service.RoleService;
@@ -22,9 +23,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Resource(name = "adminMapper")
     private AdminMapper adminMapper;
-
-    @Resource(name = "roleMapper")
-    private RoleMapper roleMapper;
 
     @Override
     public String findAdmin(Admin admin, HttpSession session, String code) {
@@ -54,7 +52,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public String insertAdmin(Admin admin,String againPassword) {
+    public String insertAdmin(Admin admin, String againPassword) {
         if ("".equals(admin.getAdminName()) || admin.getAdminName() == null || admin.getAdminName().trim().length() < 3 || admin.getAdminName().trim().length() > 15) {
             return "nameNull";
         } else if (admin.getAdminCode().trim().length() < 3 || admin.getAdminCode().trim().length() > 15) {
@@ -70,7 +68,7 @@ public class AdminServiceImpl implements AdminService {
         } else if (admin.getRoleInfo().length == 0) {
             return "roleInfoNameError";
         } else {
-           //插入管理员
+            //插入管理员
             Admin a = new Admin(new Date());
             admin.setEnrollDate(a.getEnrollDate());
             adminMapper.insertAdmin(admin);
@@ -95,9 +93,58 @@ public class AdminServiceImpl implements AdminService {
         List<AdminRole> adminAndRole = adminMapper.findAdminAndRole(admin);
         adminMapper.deleteRole_Info(adminAndRole);
         adminMapper.deleteRoleModule(adminAndRole);
-        adminMapper.deleteAdmin_role(adminAndRole);
+        adminMapper.deleteAdmin_role(admin);
         adminMapper.deleteAdmin(admin);
         return "success";
+    }
+
+    @Override
+    public String updateAdmin(Admin admin) {
+        if ("".equals(admin.getAdminName()) || admin.getAdminName() == null || admin.getAdminName().trim().length() < 3 || admin.getAdminName().trim().length() > 15) {
+            return "nameNull";
+        } else if ("^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8}$".equals(admin.getTelephone()) || "^(0\\d{2}-\\d{8}(-\\d{1,4})?)|(0\\d{3}-\\d{7,8}(-\\d{1,4})?)$".equals(admin.getTelephone()) || "".equals(admin.getTelephone())) {
+            return "telephoneError";
+        } else if ("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$".equals(admin.getEmail()) || "".equals(admin.getEmail())) {
+            return "emailError";
+        } else {
+            List<AdminRole> adminRoleList = adminMapper.findAdminAndRole(admin);
+            adminMapper.deleteRole_Info(adminRoleList);
+            adminMapper.deleteRoleModule(adminRoleList);
+            adminMapper.deleteAdmin_role(admin);
+
+
+            Admin a = new Admin(new Date());
+            admin.setEnrollDate(a.getEnrollDate());
+            adminMapper.updateAdmin(admin);
+
+            for (RoleInfo roleInfo : admin.getRoleInfo()) {
+                RoleInfo role = new RoleInfo();
+                role.setRoleName(roleInfo.getRoleName());
+                adminMapper.insertRoleInfo(role);
+
+                RoleInfo updateRoleInfo = adminMapper.findInsertRoleInfo(role);
+
+                adminMapper.insertAdminRole(admin.getAdminId(), updateRoleInfo.getRoleId());
+            }
+
+        }
+        return "success";
+    }
+
+    @Override
+    public List<ModuleInfo> findModule_info() {
+        return adminMapper.findModule_info();
+    }
+
+
+    @Override
+    public List<Admin> likeAdmin(ModuleInfo moduleInfo, String roleName) {
+        return adminMapper.likeAdmin(moduleInfo, roleName);
+    }
+
+    @Override
+    public List<RoleInfo> findAllRole_info() {
+        return adminMapper.findAllRole_info();
     }
 
 }

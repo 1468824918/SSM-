@@ -1,6 +1,7 @@
 package com.lanou.sm.admin.mapper;
 import com.lanou.sm.admin.domain.Admin;
 import com.lanou.sm.admin.domain.AdminRole;
+import com.lanou.sm.role.domain.ModuleInfo;
 import com.lanou.sm.role.domain.RoleInfo;
 import com.lanou.sm.role.mapper.RoleMapper;
 import org.junit.Test;
@@ -40,7 +41,8 @@ public class AdminMapperTest {
     //查询所有管理员
     @Test
     public void findAllAdmin() throws Exception {
-        adminMapper.findAllAdmin();
+        List<Admin> allAdmin = adminMapper.findAllAdmin();
+        System.out.println(allAdmin);
     }
 
 
@@ -65,7 +67,7 @@ public class AdminMapperTest {
 
     @Test
     public void findRoleInfo() throws Exception {
-        RoleInfo info =new RoleInfo(846,"报表管理员");
+        RoleInfo info =new RoleInfo(714,"报表管理员");
         RoleInfo roleInfo = roleMapper.findRoleInfo(info);
         System.out.println(roleInfo);
     }
@@ -79,8 +81,9 @@ public class AdminMapperTest {
 
     @Test
     public void findInsertRoleInfo() throws Exception {
-        RoleInfo info =new RoleInfo(846,"报表管理员");
-        adminMapper.findInsertRoleInfo(info);
+        RoleInfo info =new RoleInfo(714,"报表管理员");
+        RoleInfo insertRoleInfo = adminMapper.findInsertRoleInfo(info);
+        System.out.println(insertRoleInfo);
     }
 
 
@@ -92,8 +95,9 @@ public class AdminMapperTest {
 
     @Test
     public void findAdminAndRole() throws Exception {
-        Admin admin = new Admin(7021,"小乔","123","Xiaoqiao","123456789","213345@qq.com",new Date());
-        adminMapper.findAdminAndRole(admin);
+        Admin admin = new Admin(7019,"小乔","123","Xiaoqiao","123456789","213345@qq.com",new Date());
+        List<AdminRole> adminAndRole = adminMapper.findAdminAndRole(admin);
+        System.out.println(adminAndRole);
     }
 
     @Test
@@ -105,9 +109,8 @@ public class AdminMapperTest {
 
     @Test
     public void deleteAdmin_role() throws Exception {
-        Admin admin = new Admin(7023,"小乔","123","Xiaoqiao","123456789","213345@qq.com",new Date());
-        List<AdminRole> adminAndRole = adminMapper.findAdminAndRole(admin);
-        adminMapper.deleteAdmin_role(adminAndRole);
+        Admin admin = new Admin(7018,"小乔","123","Xiaoqiao","123456789","213345@qq.com",new Date());
+        adminMapper.deleteAdmin_role(admin);
     }
 
     @Test
@@ -119,9 +122,29 @@ public class AdminMapperTest {
 
     @Test
     public void deleteRoleModule() throws Exception {
-        Admin admin = new Admin(7008,"小乔","123","Xiaoqiao","123456789","213345@qq.com",new Date());
+        Admin admin = new Admin(7019,"小乔","123","Xiaoqiao","123456789","213345@qq.com",new Date());
         List<AdminRole> adminAndRole = adminMapper.findAdminAndRole(admin);
         adminMapper.deleteRoleModule(adminAndRole);
+    }
+
+    @Test
+    public void findModule_info() throws Exception {
+        adminMapper.findModule_info();
+    }
+
+    @Test
+    public void likeAdmin() throws Exception {
+        ModuleInfo moduleInfo = new ModuleInfo("业务账号",new RoleInfo("管理员"));
+        RoleInfo roleInfo = new RoleInfo("管理员");
+        adminMapper.likeAdmin(moduleInfo,roleInfo.getRoleName());
+        System.out.println(moduleInfo);
+        System.out.println(roleInfo.getRoleName());
+    }
+
+    @Test
+    public void findAllRole_info() throws Exception {
+        List<RoleInfo> allRole_info = adminMapper.findAllRole_info();
+        System.out.println(allRole_info);
     }
 
 }

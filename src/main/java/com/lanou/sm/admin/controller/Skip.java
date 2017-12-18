@@ -1,5 +1,7 @@
 package com.lanou.sm.admin.controller;
 
+import com.lanou.sm.admin.domain.Admin;
+import com.lanou.sm.admin.utils.AjaxResult;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 public class Skip {
+
+
     @RequestMapping("skipIndex")
     public String skipIndex() {
         return "index";
@@ -77,7 +81,14 @@ public class Skip {
     }
 
     @RequestMapping("admin_add")
-    public String admin_add(){
+    public String admin_add() {
         return "admin/admin_add";
     }
+
+    @RequestMapping("fee_add")
+    public String fee_add() {
+        return "fee/fee_add";
+    }
+
+
 }

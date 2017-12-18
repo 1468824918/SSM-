@@ -32,7 +32,7 @@
     <select id="findRoleInfo" resultMap="roleMap">
         SELECT *
         FROM role_info
-        WHERE role_id = #{roleId}
+        WHERE role_name = #{roleName}
     </select>
 
     <select id="findAll" resultMap="roleMap">

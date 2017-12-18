@@ -1,252 +1,335 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title></title>
-        <link type="text/css" rel="stylesheet" media="all" href="/styles/global.css" />
-        <link type="text/css" rel="stylesheet" media="all" href="/styles/global_color.css" />
-        <script language="javascript" type="text/javascript" src="/jquery-3.2.1.js">
-            //显示角色详细信息
-            function showDetail(flag, a) {
-                var detailDiv = a.parentNode.getElementsByTagName("div")[0];
-                if (flag) {
-                    detailDiv.style.display = "block";
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link type="text/css" rel="stylesheet" media="all" href="/styles/global.css"/>
+    <link type="text/css" rel="stylesheet" media="all" href="/styles/global_color.css"/>
+    <script language="javascript" type="text/javascript" src="/jquery-3.2.1.js">
+        //显示角色详细信息
+        function showDetail(flag, a) {
+            var detailDiv = a.parentNode.getElementsByTagName("div")[0];
+            if (flag) {
+                detailDiv.style.display = "block";
+            }
+            else
+                detailDiv.style.display = "none";
+        }
+        //重置密码
+        function resetPwd() {
+            alert("请至少选择一条数据！");
+            //document.getElementById("operate_result_info").style.display = "block";
+        }
+        //全选
+        function selectAdmins(inputObj) {
+            var inputArray = document.getElementById("datalist").getElementsByTagName("input");
+            for (var i = 1; i < inputArray.length; i++) {
+                if (inputArray[i].type == "checkbox") {
+                    inputArray[i].checked = inputObj.checked;
                 }
-                else
-                    detailDiv.style.display = "none";
             }
-            //重置密码
-            function resetPwd() {
-                alert("请至少选择一条数据！");
-                //document.getElementById("operate_result_info").style.display = "block";
-            }
-            //全选
-            function selectAdmins(inputObj) {
-                var inputArray = document.getElementById("datalist").getElementsByTagName("input");
-                for (var i = 1; i < inputArray.length; i++) {
-                    if (inputArray[i].type == "checkbox") {
-                        inputArray[i].checked = inputObj.checked;
+        }
+    </script>
+</head>
+<body>
+<!--Logo区域开始-->
+<div id="header">
+    <img src="/images/logo.png" alt="logo" class="left"/>
+    <a href="#">[退出]</a>
+</div>
+<!--Logo区域结束-->
+<!--导航区域开始-->
+<div id="navi">
+    <ul id="menu">
+        <li><a href="../index.html" class="index_off"></a></li>
+        <li><a href="#" onclick="role_ist()" class="role_off"></a></li>
+        <li><a href="#" onclick="admin_list()" class="admin_off"></a></li>
+        <li><a href="#" onclick="fee_list()" class="fee_off"></a></li>
+        <li><a href="#" onclick="account_list()" class="account_off"></a></li>
+        <li><a href="#" onclick="service_list()" class="service_off"></a></li>
+        <li><a href="#" onclick="bill_list()" class="bill_off"></a></li>
+        <li><a href="#" onclick="report_list()" class="report_off"></a></li>
+        <li><a href="#" onclick="user_info()" class="information_off"></a></li>
+        <li><a href="#" onclick="user_modi_pwd()" class="password_off"></a></li>
+    </ul>
+</div>
+<!--导航区域结束-->
+<!--主要区域开始-->
+<div id="main">
+    <form action="" method="">
+        <!--查询-->
+        <div class="search_add">
+            <div>
+                模块：
+                <select id="selModules" class="select_search">
+                </select>
+            </div>
+            <div>角色：<input id="roleName" type="text" value="" class="text_search width200"/></div>
+            <div><input id="but" type="button" value="搜索" class="btn_search"/></div>
+            <input type="button" value="密码重置" class="btn_add" onclick="resetPwd();"/>
+            <input type="button" value="增加" class="btn_add" onclick="add(this)"/>
+        </div>
+        <!--删除和密码重置的操作提示-->
+        <div id="operate_result_info" class="operate_fail">
+            <img src="/images/close.png" onclick="this.parentNode.style.display='none';"/>
+            <span>删除失败！数据并发错误。</span><!--密码重置失败！数据并发错误。-->
+        </div>
+        <!--数据区域：用表格展示数据-->
+        <div id="data">
+            <table id="datalist">
+                <tr>
+                    <th class="th_select_all">
+                        <input type="checkbox" onclick="selectAdmins(this);"/>
+                        <span>全选</span>
+                    </th>
+                    <th>管理员ID</th>
+                    <th>姓名</th>
+                    <th>登录名</th>
+                    <th>电话</th>
+                    <th>电子邮件</th>
+                    <th>授权日期</th>
+                    <th class="width100">拥有角色</th>
+                    <th></th>
+                </tr>
+            </table>
+        </div>
+    </form>
+</div>
+<!--主要区域结束-->
+<div id="footer">
+    <p>[源自北美的技术，最优秀的师资，最真实的企业环境，最适用的实战项目]</p>
+    <span>版权所有(C)云科技有限公司 </span>
+</div>
+<script type="application/javascript">
+    $(document).ready(function () {
+        //查询权限
+        $.ajax({
+            url: "findModule_info",
+            success: function (result) {
+                if (result.code == "0") {
+                    for (var i = 0; i < result.data.length; i++) {
+                        var module = result.data[i];
+                        var moduleName = $("<option name='checkbox' ></option>").append(module.moduleName);
+                        $("#selModules").append(moduleName)
                     }
                 }
             }
-        </script>       
-    </head>
-    <body>
-        <!--Logo区域开始-->
-        <div id="header">
-            <img src="/images/logo.png" alt="logo" class="left"/>
-            <a href="#">[退出]</a>            
-        </div>
-        <!--Logo区域结束-->
-        <!--导航区域开始-->
-        <div id="navi">                        
-            <ul id="menu">
-                <li><a href="../index.html" class="index_off"></a></li>
-                <li><a href="#" onclick="role_ist()" class="role_off"></a></li>
-                <li><a href="#" onclick="admin_list()" class="admin_off"></a></li>
-                <li><a href="#" onclick="fee_list()" class="fee_off"></a></li>
-                <li><a href="#" onclick="account_list()" class="account_off"></a></li>
-                <li><a href="#" onclick="service_list()" class="service_off"></a></li>
-                <li><a href="#" onclick="bill_list()" class="bill_off"></a></li>
-                <li><a href="#" onclick="report_list()" class="report_off"></a></li>
-                <li><a href="#" onclick="user_info()" class="information_off"></a></li>
-                <li><a href="#" onclick="user_modi_pwd()" class="password_off"></a></li>
-            </ul>            
-        </div>
-        <!--导航区域结束-->
-        <!--主要区域开始-->
-        <div id="main">
-            <form action="" method="">
-                <!--查询-->
-                <div class="search_add">
-                    <div>
-                        模块：
-                        <select id="selModules" class="select_search">
-                            <option>全部</option>
-                            <option>角色管理</option>
-                            <option>管理员管理</option>
-                            <option>资费管理</option>
-                            <option>账务账号</option>
-                            <option>业务账号</option>
-                            <option>账单管理</option>
-                            <option>报表</option>
-                        </select>
-                    </div>
-                    <div>角色：<input type="text" value="" class="text_search width200" /></div>
-                    <div><input type="button" value="搜索" class="btn_search"/></div>
-                    <input type="button" value="密码重置" class="btn_add" onclick="resetPwd();" />
-                    <input type="button" value="增加" class="btn_add" onclick="add(this)" />
-                </div>
-                <!--删除和密码重置的操作提示-->
-                <div id="operate_result_info" class="operate_fail">
-                    <img src="/images/close.png" onclick="this.parentNode.style.display='none';" />
-                    <span>删除失败！数据并发错误。</span><!--密码重置失败！数据并发错误。-->
-                </div> 
-                <!--数据区域：用表格展示数据-->     
-                <div id="data">            
-                    <table id="datalist">
-                        <tr>
-                            <th class="th_select_all">
-                                <input type="checkbox" onclick="selectAdmins(this);" />
-                                <span>全选</span>
-                            </th>
-                            <th>管理员ID</th>
-                            <th>姓名</th>
-                            <th>登录名</th>
-                            <th>电话</th>
-                            <th>电子邮件</th>
-                            <th>授权日期</th>
-                            <th class="width100">拥有角色</th>
-                            <th></th>
-                        </tr>                      
-                        <!--<tr>-->
-                            <!--<td><input type="checkbox" /></td>-->
-                            <!--<td>1</td>-->
-                            <!--<td>贾强</td>-->
-                            <!--<td>admin</td>-->
-                            <!--<td>13077332357</td>-->
-                            <!--<td>jiaqiang123@qq.com.cn</td>-->
-                            <!--<td>2011-31-12</td>-->
-                            <!--<td>-->
-                                <!--<a class="summary"  onmouseover="showDetail(true,this);" onmouseout="showDetail(false,this);">超级管理员...</a>-->
-                                <!--&lt;!&ndash;浮动的详细信息&ndash;&gt;-->
-                                <!--<div class="detail_info">-->
-                                    <!--超级管理员，角色管理员，账单管理员，报表管理员，业务账号管理员，账务账号管理员，aa，bb-->
-                                <!--</div>-->
-                            <!--</td>-->
-                            <!--<td class="td_modi">-->
-                                <!--<input type="button" value="修改" class="btn_modify" onclick="location.href='admin_modi.html';" />-->
-                                <!--<input type="button" value="删除" class="btn_delete" onclick="deleteAdmin();" />-->
-                            <!--</td>-->
-                        <!--</tr>-->
-                    </table>
-                </div>
-            </form>
-        </div>
-        <!--主要区域结束-->
-        <div id="footer">
-            <p>[源自北美的技术，最优秀的师资，最真实的企业环境，最适用的实战项目]</p>
-            <span>版权所有(C)云科技有限公司 </span>
-        </div>
-    <script type="application/javascript">
-        $(document).ready(function () {
-            $.ajax({
-                url:"/findAllAdmin",
-                success: function (result) {
-                    if (result.code == "0") {
-                        for (var i = 0; i < result.data.length; i++) {
-                            var admin = result.data[i];
-                             if(null != admin.moduleInfo) {
-                                var option = $("<th></th>").append('<input type="checkbox" class="content" />');
-                                var adminId = $("<td></td>").text(admin.adminId);
-                                var adminCode = $("<td></td>").text(admin.adminName);
-                                var password = $("<td></td>").text(admin.adminCode);
-                                var telephone = $("<td></td>").text(admin.telephone);
-                                var email = $("<td></td>").text(admin.email);
-                                var enrollDate = $("<td></td>").text(admin.enrollDate);
-                                 var moduleName = $("<td></td>").text(admin.moduleInfo.moduleName);
-                                var p = $("<td></td>").append('<input id="update" type="button" onclick="updateRole(this)" value="修改" class="btn_modify"/>' + '<input onclick="deleteRole(this)"  type="button" value="删除" class="btn_delete" />');
-                                var tr = $("<tr id='tr'></tr>")
-                                        .append(option)
-                                        .append(adminId)
-                                        .append(adminCode)
-                                        .append(password)
-                                        .append(telephone)
-                                        .append(email)
-                                        .append(enrollDate)
-                                        .append(moduleName)
-                                        .append(p);
-                                $("#datalist").append(tr)
-                            }
-                            else{
-                                var option = $("<th></th>").append('<input type="checkbox" class="content" />');;
-                                var adminId = $("<td></td>").text(admin.adminId);
-                                var adminCode = $("<td></td>").text(admin.adminName);
-                                var password = $("<td></td>").text(admin.adminCode);
-                                var telephone = $("<td></td>").text(admin.telephone);
-                                var email = $("<td></td>").text(admin.email);
-                                var enrollDate = $("<td></td>").text(admin.enrollDate);
-                                 var moduleName = $("<td></td>");
-                                var p = $("<td></td>").append('<input id="update" type="button" onclick="updateRole(this)" value="修改" class="btn_modify"/>' + '<input onclick="deleteRole(this)"  type="button" value="删除" class="btn_delete" />');
-                                var tr = $("<tr id='tr'></tr>")
-                                        .append(option)
-                                        .append(adminId)
-                                        .append(adminCode)
-                                        .append(password)
-                                        .append(telephone)
-                                        .append(email)
-                                        .append(enrollDate)
-                                        .append(moduleName)
-                                        .append(p);
-                                $("#datalist").append(tr)
-                            }
+        })
+        //查询所有管理员
+        $.ajax({
+            url: "/findAllAdmin",
+            success: function (result) {
+                if (result.code == "0") {
+                    for (var i = 0; i < result.data.length; i++) {
+                        var admin = result.data[i];
+                        try {
+                            admin.roleInfoList[0].roleName
+                            var option = $("<th></th>").append('<input type="checkbox" class="content" />');
+                            var adminId = $("<td></td>").text(admin.adminId);
+                            var adminCode = $("<td></td>").text(admin.adminName);
+                            var password = $("<td></td>").text(admin.adminCode);
+                            var telephone = $("<td></td>").text(admin.telephone);
+                            var email = $("<td></td>").text(admin.email);
+                            var enrollDate = $("<td></td>").text(admin.enrollDate);
+                            var roleName = $("<td></td>").text(admin.roleInfoList[0].roleName);
+                            var p = $("<td></td>").append('<input id="update" type="button" onclick="updateRole(this)" value="修改" class="btn_modify"/>' + '<input onclick="deleteRole(this)"  type="button" value="删除" class="btn_delete" />');
+                            var tr = $("<tr id='tr'></tr>")
+                                    .append(option)
+                                    .append(adminId)
+                                    .append(adminCode)
+                                    .append(password)
+                                    .append(telephone)
+                                    .append(email)
+                                    .append(enrollDate)
+                                    .append(roleName)
+                                    .append(p);
+                            $("#datalist").append(tr)
                         }
+                        catch (Error) {
+                            var option = $("<th></th>").append('<input type="checkbox" class="content" />');
+                            var adminId = $("<td></td>").text(admin.adminId);
+                            var adminCode = $("<td></td>").text(admin.adminName);
+                            var password = $("<td></td>").text(admin.adminCode);
+                            var telephone = $("<td></td>").text(admin.telephone);
+                            var email = $("<td></td>").text(admin.email);
+                            var enrollDate = $("<td></td>").text(admin.enrollDate);
+                            var roleName = $("<td></td>")
+                            var p = $("<td></td>").append('<input id="update" type="button" onclick="updateRole(this)" value="修改" class="btn_modify"/>' + '<input onclick="deleteRole(this)"  type="button" value="删除" class="btn_delete" />');
+                            var tr = $("<tr id='tr'></tr>")
+                                    .append(option)
+                                    .append(adminId)
+                                    .append(adminCode)
+                                    .append(password)
+                                    .append(telephone)
+                                    .append(email)
+                                    .append(enrollDate)
+                                    .append(roleName)
+                                    .append(p);
+                            $("#datalist").append(tr);
+                        }
+                    }
+                }
+            }
+        })
+    });
+    //修改角色
+    function updateRole() {
+        $("#datalist tr").click(function () {
+            var td = $(this).find("td");
+            var adminId = td.eq(0).html();
+            var adminName = td.eq(1).html();
+            var adminCode = td.eq(2).html();
+            var telephone = td.eq(3).html();
+            var email = td.eq(4).html();
+            $.ajax({
+                url: "skipAdmin_modi",
+                data: {
+                    "adminName": adminName,
+                    "adminId": adminId,
+                    "adminCode": adminCode,
+                    "telephone": telephone,
+                    "email": email
+                },
+                success: function (result) {
+                    alert(result)
+                    if (result == "success") {
+                        window.location = 'Admin_modi';
                     }
                 }
             })
         });
-        //删除角色
-        function deleteRole() {
-            var r = window.confirm("确定要删除此角色吗？");
-            //以jquery为例实现点击某行获得某个td的数据
-            $("#datalist tr").click(function () {
+    }
+    //删除角色
+    function deleteRole() {
+        var r = window.confirm("确定要删除此角色吗？");
+        //以jquery为例实现点击某行获得某个td的数据
+        $("#datalist tr").click(function () {
 
-                //给每行绑定了一个点击事件
-                var td = $(this).find("td");
+            //给每行绑定了一个点击事件
+            var td = $(this).find("td");
 
-                //this指向了当前点击的行，通过find我们获得了该行所有的td对象
-                //题中说到某个td，为了演示所以我们假设是要获得第几个td的数据
+            //this指向了当前点击的行，通过find我们获得了该行所有的td对象
+            //题中说到某个td，为了演示所以我们假设是要获得第几个td的数据
 
-                //通过eq可以得到具体的某个td对象，从而得到相应的数据
-                var data = td.eq(0).html();
-                alert(data)
-                $.ajax({
-                    url: "/deleteAdmin",
-                    data: {
-                        "adminId": data
-                    },
-                    success: function (result) {
-                        if (result == "success") {
-                            window.location.href = "admin_list"
-//                        document.getElementById("operate_result_info").style.display = "block";
+            //通过eq可以得到具体的某个td对象，从而得到相应的数据
+            var data = td.eq(0).html();
+            alert(data);
+            $.ajax({
+                url: "/deleteAdmin",
+                data: {
+                    "adminId": data
+                },
+                success: function (result) {
+                    if (result == "success") {
+                        window.location.href = "admin_list"
+                    }
+                }
+            })
+
+        });
+    }
+    //模糊查询
+    var moduleName = "";
+    $("#selModules").click(function () {
+        moduleName = $("#selModules").find("option:selected").text()
+    })
+    $("#but").click(function () {
+        var roleName = $("#roleName").val();
+        alert(moduleName);
+        $.ajax({
+            url: "likeAdmin",
+            data: {
+                "moduleName": moduleName,
+                "roleName": roleName
+            },
+            traditional: true,
+            success: function (result) {
+                console.log(result)
+                alert(result)
+                if (result.code == "0") {
+                    for (var i = 0; i < result.data.length; i++) {
+                        $("#tr").remove();
+                        var admin = result.data[i];
+                        if (null != admin.roleInfoList[0]) {
+                            var option = $("<th></th>").append('<input type="checkbox" class="content" />');
+                            var adminId = $("<td></td>").text(admin.adminId);
+                            var adminCode = $("<td></td>").text(admin.adminName);
+                            var password = $("<td></td>").text(admin.adminCode);
+                            var telephone = $("<td></td>").text(admin.telephone);
+                            var email = $("<td></td>").text(admin.email);
+                            var enrollDate = $("<td></td>").text(admin.enrollDate);
+                            var roleName = $("<td></td>").text(admin.roleInfoList[0].roleName);
+                            var p = $("<td></td>").append('<input id="update" type="button" onclick="updateRole(this)" value="修改" class="btn_modify"/>' + '<input onclick="deleteRole(this)"  type="button" value="删除" class="btn_delete" />');
+                            var tr = $("<tr id='tr'></tr>")
+                                    .append(option)
+                                    .append(adminId)
+                                    .append(adminCode)
+                                    .append(password)
+                                    .append(telephone)
+                                    .append(email)
+                                    .append(enrollDate)
+                                    .append(roleName)
+                                    .append(p);
+                            $("#datalist").append(tr)
+                        }else if (admin.roleInfoList[0]==null){
+                            var option = $("<th></th>").append('<input type="checkbox" class="content" />');
+                            var adminId = $("<td></td>").text(admin.adminId);
+                            var adminCode = $("<td></td>").text(admin.adminName);
+                            var password = $("<td></td>").text(admin.adminCode);
+                            var telephone = $("<td></td>").text(admin.telephone);
+                            var email = $("<td></td>").text(admin.email);
+                            var enrollDate = $("<td></td>").text(admin.enrollDate);
+                            var roleName = $("<td></td>").text(admin.roleInfoList.roleName);
+                            var p = $("<td></td>").append('<input id="update" type="button" onclick="updateRole(this)" value="修改" class="btn_modify"/>' + '<input onclick="deleteRole(this)"  type="button" value="删除" class="btn_delete" />');
+                            var tr = $("<tr id='tr'></tr>")
+                                    .append(option)
+                                    .append(adminId)
+                                    .append(adminCode)
+                                    .append(password)
+                                    .append(telephone)
+                                    .append(email)
+                                    .append(enrollDate)
+                                    .append(roleName)
+                                    .append(p);
+                            $("#datalist").append(tr)
                         }
                     }
-                })
+                }
+            }
+        })
+    })
+    function add() {
+        window.location.href = 'admin_add';
+    }
+    function role_ist() {
+        window.location.href = "role_1"
 
-            });
-        }
-        function add() {
-            window.location.href ='admin_add';
-        }
-        function role_ist() {
-            window.location.href = "role_1"
+    }
+    function admin_list() {
+        window.location.href = "admin_list"
 
-        }
-        function admin_list() {
-            window.location.href = "admin_list"
-
-        }
-        function fee_list() {
-            window.location.href = "fee_list"
-        }
-        function account_list() {
-            window.location.href = "account_list"
-        }
-        function service_list() {
-            window.location.href = "service_list"
-        }
-        function bill_list() {
-            window.location.href = "bill_list"
-        }
-        function report_list() {
-            window.location.href = "report_list"
-        }
-        function user_info() {
-            window.location.href = "user_info"
-        }
-        function user_modi_pwd() {
-            window.location.href = "user_modi_pwd"
-        }
-    </script>
-    </body>
+    }
+    function fee_list() {
+        window.location.href = "fee_list"
+    }
+    function account_list() {
+        window.location.href = "account_list"
+    }
+    function service_list() {
+        window.location.href = "service_list"
+    }
+    function bill_list() {
+        window.location.href = "bill_list"
+    }
+    function report_list() {
+        window.location.href = "report_list"
+    }
+    function user_info() {
+        window.location.href = "user_info"
+    }
+    function user_modi_pwd() {
+        window.location.href = "user_modi_pwd"
+    }
+</script>
+</body>
 </html>

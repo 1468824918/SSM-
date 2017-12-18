@@ -2,6 +2,7 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/src/main/resources/com/lanou/sm/admin/mapper/AdminMapper.xml" dialect="MySQL" />
+    <file url="file://$PROJECT_DIR$/src/main/resources/com/lanou/sm/cost/mapper/CostMapper.xml" dialect="MySQL" />
     <file url="file://$PROJECT_DIR$/src/main/resources/com/lanou/sm/role/mapper/RoleMapper.xml" dialect="MySQL" />
   </component>
 </project>

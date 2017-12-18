@@ -3,6 +3,7 @@ package com.lanou.sm.admin.domain;
 import com.lanou.sm.role.domain.ModuleInfo;
 import com.lanou.sm.role.domain.RoleInfo;
 
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.List;
 /**
  * Created by dllo on 17/12/2.
  */
-public class Admin {
+public class Admin{
     private int adminId;
     private String adminCode;
     private String password;
@@ -20,6 +21,8 @@ public class Admin {
     private Date enrollDate;
     private ModuleInfo moduleInfo;
     private RoleInfo[] roleInfo;
+    private List<AdminRole> adminRole;
+    private List<RoleInfo> roleInfoList;
 
     public Admin(Date enrollDate) {
         this.enrollDate = enrollDate;
@@ -50,6 +53,7 @@ public class Admin {
         this.email = email;
         this.enrollDate = enrollDate;
     }
+
 
     public int getAdminId() {
         return adminId;
@@ -123,6 +127,22 @@ public class Admin {
         this.roleInfo = roleInfo;
     }
 
+    public List<AdminRole> getAdminRole() {
+        return adminRole;
+    }
+
+    public void setAdminRole(List<AdminRole> adminRole) {
+        this.adminRole = adminRole;
+    }
+
+    public List<RoleInfo> getRoleInfoList() {
+        return roleInfoList;
+    }
+
+    public void setRoleInfoList(List<RoleInfo> roleInfoList) {
+        this.roleInfoList = roleInfoList;
+    }
+
     @Override
     public String toString() {
         return "Admin{" +
@@ -135,6 +155,8 @@ public class Admin {
                 ", enrollDate=" + enrollDate +
                 ", moduleInfo=" + moduleInfo +
                 ", roleInfo=" + Arrays.toString(roleInfo) +
+                ", adminRole=" + adminRole +
+                ", roleInfoList=" + roleInfoList +
                 '}';
     }
 }
