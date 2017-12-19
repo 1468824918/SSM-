@@ -24,4 +24,13 @@
     <select id="findAllCost" resultType="com.lanou.sm.cost.domain.Cost" resultMap="costMap">
         SELECT * FROM cost
     </select>
+    <select id="findCostById" resultType="com.lanou.sm.cost.domain.Cost" resultMap="costMap">
+        SELECT * FROM cost WHERE cost_id=#{costId}
+    </select>
+    <select id="findCostDesc" resultType="com.lanou.sm.cost.domain.Cost" resultMap="costMap">
+        select * from cost order by base_duration DESC
+    </select>
+    <select id="findCostTime" resultType="com.lanou.sm.cost.domain.Cost" resultMap="costMap">
+        select * from cost order by base_cost DESC
+    </select>
 </mapper>

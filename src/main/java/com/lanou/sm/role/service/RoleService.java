@@ -16,4 +16,6 @@ public interface RoleService {
     String deleteRole(RoleInfo roleInfo);
 
     String insertUpdateRoleInfo(RoleInfo roleInfo,String[] moduleId);
+
+    List<ModuleInfo> findModule_Info();
 }

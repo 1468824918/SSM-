@@ -57,14 +57,14 @@
         <div class="text_info clearfix"><span>设置权限：</span></div>
         <div class="input_info_high">
             <div class="input_info_scroll">
-                <ul>
-                    <li><input id="a" type="checkbox" value="2"/>管理员管理</li>
-                    <li><input id="b" type="checkbox" value="1"/>角色管理</li>
-                    <li><input id="c" type="checkbox" value="3"/>资费管理</li>
-                    <li><input id="d" type="checkbox" value="4"/>账务账号</li>
-                    <li><input id="e" type="checkbox" value="5"/>业务账号</li>
-                    <li><input id="f" type="checkbox" value="6"/>账单</li>
-                    <li><input id="g" type="checkbox" value="7"/>报表</li>
+                <ul id="ul">
+                    <!--<li><input id="a" type="checkbox" value="2"/>管理员管理</li>-->
+                    <!--<li><input id="b" type="checkbox" value="1"/>角色管理</li>-->
+                    <!--<li><input id="c" type="checkbox" value="3"/>资费管理</li>-->
+                    <!--<li><input id="d" type="checkbox" value="4"/>账务账号</li>-->
+                    <!--<li><input id="e" type="checkbox" value="5"/>业务账号</li>-->
+                    <!--<li><input id="f" type="checkbox" value="6"/>账单</li>-->
+                    <!--<li><input id="g" type="checkbox" value="7"/>报表</li>-->
                 </ul>
             </div>
             <span class="required">*</span>
@@ -89,6 +89,8 @@
             checkID[i] = $(this).val();
         });
         var roleName = $("#name").val();
+        alert(checkID)
+        console.log(checkID)
         $.ajax({
             url: "/role_adds",
             type: "POST",
@@ -109,6 +111,20 @@
             }
         })
 
+    })
+    $(document).ready(function () {
+        $.ajax({
+            url: "findModuleInfo",
+            success: function (result) {
+                if (result.code == "0") {
+                    for (var i = 0; i < result.data.length; i++) {
+                        var moduleInfo = result.data[i];
+                        var  moduleName =$("<li></li>").append("<input id='moduleId' type='checkbox' value='"+moduleInfo.moduleId+"'/>" + moduleInfo.moduleName)
+                        $("#ul").append(moduleName)
+                    }
+                }
+            }
+        })
     })
     function role() {
         window.location.href = "role_1"

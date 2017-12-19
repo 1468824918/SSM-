@@ -10,7 +10,10 @@
             <id column="module_id" property="moduleId"/>
             <result column="module_name" property="moduleName"/>
         </collection>
-
+    </resultMap>
+    <resultMap id="ModuleInfoMap" type="ModuleInfo">
+        <id column="module_id" property="moduleId"/>
+        <result column="module_name" property="moduleName"/>
     </resultMap>
     <insert id="insertRole">
         INSERT INTO role_info VALUES (#{roleId}, #{roleName});
@@ -19,6 +22,9 @@
     <insert id="insertRoleModule">
         INSERT INTO role_module VALUES (#{roleId}, #{moduleInfo.moduleId})
     </insert>
+    <update id="updateRoleInfoById">
+        UPDATE role_info SET role_name=#{roleName} where role_id=#{roleId}
+    </update>
     <delete id="deleteRole">
         DELETE  FROM role_info WHERE role_id=#{roleId}
     </delete>
@@ -32,7 +38,7 @@
     <select id="findRoleInfo" resultMap="roleMap">
         SELECT *
         FROM role_info
-        WHERE role_name = #{roleName}
+        WHERE role_id = #{roleId}
     </select>
 
     <select id="findAll" resultMap="roleMap">
@@ -44,5 +50,8 @@
         FROM role_info r LEFT JOIN (role_module rm, module_info m) ON r.role_id = rm.role_id
         AND rm.module_id = m.module_id
         GROUP BY r.role_id
+    </select>
+    <select id="findModule_Info" resultType="com.lanou.sm.role.domain.ModuleInfo" resultMap="ModuleInfoMap">
+        SELECT * FROM module_info
     </select>
 </mapper>

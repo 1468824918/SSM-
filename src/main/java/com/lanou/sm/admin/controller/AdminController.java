@@ -108,7 +108,6 @@ public class AdminController {
     @ResponseBody
     public String admin_modi(Admin admin){
         admin1 = admin;
-        System.out.println(admin);
         return "success";
     }
 

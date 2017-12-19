@@ -19,4 +19,13 @@ public interface CostMapper {
     //启用
     int update(Cost cost);
 
+    //根据id查资费
+    Cost findCostById(String costId);
+
+    //基费
+    List<Cost> findCostDesc();
+
+    //时长
+    List<Cost> findCostTime();
+
 }

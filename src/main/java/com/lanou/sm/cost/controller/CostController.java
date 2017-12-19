@@ -3,11 +3,15 @@ package com.lanou.sm.cost.controller;
 import com.lanou.sm.admin.utils.AjaxResult;
 import com.lanou.sm.cost.domain.Cost;
 import com.lanou.sm.cost.service.CostService;
+import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Created by dllo on 17/12/18.
@@ -55,4 +59,46 @@ public class CostController {
     public String updateCost(){
         return "fee/fee_modi";
     }
+
+
+
+    @RequestMapping("fee_detail")
+    @ResponseBody
+    public String fee_detail(String costId, HttpSession session){
+        session.setAttribute("costId",costId);
+        return "success";
+    }
+
+    @RequestMapping("detail")
+    public String detail(){
+        return "fee/fee_detail";
+    }
+
+    @RequestMapping("findCostById")
+    @ResponseBody
+    public AjaxResult findCostById(HttpSession session){
+        String costId = (String) session.getAttribute("costId");
+        return new AjaxResult(costService.findCostById(costId));
+    }
+
+    /**
+     * 基费
+     * @return
+     */
+    @RequestMapping("findCostDesc")
+    @ResponseBody
+    public AjaxResult findCostDesc(){
+        return new AjaxResult(costService.findCostDesc());
+    }
+
+    /**
+     * 时长
+     * @return
+     */
+    @RequestMapping("findCostTime")
+    @ResponseBody
+    public AjaxResult findCostTime(){
+        return new AjaxResult(costService.findCostTime());
+    }
+
 }

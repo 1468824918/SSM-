@@ -32,4 +32,19 @@ public class CostServiceImpl implements CostService {
         costMapper.update(cost);
         return costMapper.findAllCost();
     }
+
+    @Override
+    public Cost findCostById(String costId) {
+        return costMapper.findCostById(costId);
+    }
+
+    @Override
+    public List<Cost> findCostDesc() {
+        return costMapper.findCostDesc();
+    }
+
+    @Override
+    public List<Cost> findCostTime() {
+        return costMapper.findCostTime();
+    }
 }

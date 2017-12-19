@@ -1,190 +1,190 @@
 ﻿﻿﻿﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title></title>
-        <link type="text/css" rel="stylesheet" media="all" href="/styles/global.css" />
-        <link type="text/css" rel="stylesheet" media="all" href="/styles/global_color.css" />
-        <script language="javascript" type="text/javascript" src="/jquery-3.2.1.js">
-            //保存成功的提示消息
-            function showResult() {
-                showResultDiv(true);
-                window.setTimeout("showResultDiv(false);", 3000);
-            }
-            function showResultDiv(flag) {
-                var divResult = document.getElementById("save_result_info");
-                if (flag)
-                    divResult.style.display = "block";
-                else
-                    divResult.style.display = "none";
-            }
-        </script>
-    </head>
-    <body>
-        <!--Logo区域开始-->
-        <div id="header">
-            <img src="/images/logo.png" alt="logo" class="left"/>
-            <a href="#">[退出]</a>            
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link type="text/css" rel="stylesheet" media="all" href="/styles/global.css"/>
+    <link type="text/css" rel="stylesheet" media="all" href="/styles/global_color.css"/>
+    <script language="javascript" type="text/javascript" src="/jquery-3.2.1.js">
+        //保存成功的提示消息
+        function showResult() {
+            showResultDiv(true);
+            window.setTimeout("showResultDiv(false);", 3000);
+        }
+        function showResultDiv(flag) {
+            var divResult = document.getElementById("save_result_info");
+            if (flag)
+                divResult.style.display = "block";
+            else
+                divResult.style.display = "none";
+        }
+    </script>
+</head>
+<body>
+<!--Logo区域开始-->
+<div id="header">
+    <img src="/images/logo.png" alt="logo" class="left"/>
+    <a href="#">[退出]</a>
+</div>
+<!--Logo区域结束-->
+<!--导航区域开始-->
+<div id="navi">
+    <ul id="menu">
+        <li><a href="../index.html" class="index_off"></a></li>
+        <li><a href="#" onclick="role_ist()" class="role_off"></a></li>
+        <li><a href="#" onclick="admin_list()" class="admin_off"></a></li>
+        <li><a href="#" onclick="fee_list()" class="fee_off"></a></li>
+        <li><a href="#" onclick="account_list()" class="account_off"></a></li>
+        <li><a href="#" onclick="service_list()" class="service_off"></a></li>
+        <li><a href="#" onclick="bill_list()" class="bill_off"></a></li>
+        <li><a href="#" onclick="report_list()" class="report_off"></a></li>
+        <li><a href="#" onclick="user_info()" class="information_off"></a></li>
+        <li><a href="#" onclick="user_modi_pwd()" class="password_off"></a></li>
+    </ul>
+</div>
+<!--导航区域结束-->
+<!--主要区域开始-->
+<div id="main">
+    <div id="save_result_info" class="save_success">保存成功！</div>
+    <form action="" method="" class="main_form">
+        <div class="text_info clearfix"><span>姓名：</span></div>
+        <div class="input_info">
+            <input id="adminName" type="text" value=""/>
+            <span class="required">*</span>
+            <div id="div1" class="validate_msg_long error_msg"></div>
         </div>
-        <!--Logo区域结束-->
-        <!--导航区域开始-->
-        <div id="navi">
-            <ul id="menu">
-                <li><a href="../index.html" class="index_off"></a></li>
-                <li><a href="#" onclick="role_ist()" class="role_off"></a></li>
-                <li><a href="#" onclick="admin_list()" class="admin_off"></a></li>
-                <li><a href="#" onclick="fee_list()" class="fee_off"></a></li>
-                <li><a href="#" onclick="account_list()" class="account_off"></a></li>
-                <li><a href="#" onclick="service_list()" class="service_off"></a></li>
-                <li><a href="#" onclick="bill_list()" class="bill_off"></a></li>
-                <li><a href="#" onclick="report_list()" class="report_off"></a></li>
-                <li><a href="#" onclick="user_info()" class="information_off"></a></li>
-                <li><a href="#" onclick="user_modi_pwd()" class="password_off"></a></li>
-            </ul>
+        <div class="text_info clearfix"><span>管理员账号：</span></div>
+        <div class="input_info">
+            <input id="adminCode" type="text" readonly="readonly" class="readonly" value=""/>
         </div>
-        <!--导航区域结束-->
-        <!--主要区域开始-->
-        <div id="main">            
-            <div id="save_result_info" class="save_success">保存成功！</div>
-            <form action="" method="" class="main_form">
-                    <div class="text_info clearfix"><span>姓名：</span></div>
-                    <div class="input_info">
-                        <input id="adminName" type="text" value="" />
-                        <span class="required">*</span>
-                        <div id="div1" class="validate_msg_long error_msg"></div>
-                    </div>
-                    <div class="text_info clearfix"><span>管理员账号：</span></div>
-                    <div class="input_info">
-                        <input id="adminCode" type="text" readonly="readonly" class="readonly" value=""  />
-                    </div>
-                    <div class="text_info clearfix"><span>电话：</span></div>
-                    <div class="input_info">
-                        <input id="telephone" type="text" value=""  />
-                        <span class="required">*</span>
-                        <div id="div2" class="validate_msg_long error_msg"></div>
-                    </div>
-                    <div class="text_info clearfix"><span>Email：</span></div>
-                    <div class="input_info">
-                        <input id="email" type="text" class="width200" value=""/>
-                        <span class="required">*</span>
-                        <div id="div3" class="validate_msg_medium error_msg"></div>
-                    </div>
-                    <div class="text_info clearfix"><span>角色：</span></div>
-                    <div class="input_info_high">
-                        <div class="input_info_scroll">
-                            <ul id="ul">
-                            </ul>
-                        </div>
-                        <span class="required">*</span>
-                        <div id="div" class="validate_msg_tiny error_msg"></div>
-                    </div>
-                    <div class="button_info clearfix">
-                        <input id="inp" type="button" value="保存" class="btn_save"/>
-                        <input type="button" value="取消" class="btn_save" />
-                    </div>
-                </form>  
+        <div class="text_info clearfix"><span>电话：</span></div>
+        <div class="input_info">
+            <input id="telephone" type="text" value=""/>
+            <span class="required">*</span>
+            <div id="div2" class="validate_msg_long error_msg"></div>
         </div>
-        <!--主要区域结束-->
-        <div id="footer">
-            <span>[源自北美的技术，最优秀的师资，最真实的企业环境，最适用的实战项目]</span>
-            <br />
-            <span>版权所有(C)云科技有限公司 </span>
+        <div class="text_info clearfix"><span>Email：</span></div>
+        <div class="input_info">
+            <input id="email" type="text" class="width200" value=""/>
+            <span class="required">*</span>
+            <div id="div3" class="validate_msg_medium error_msg"></div>
         </div>
-        <script type="application/javascript">
-            var adminId =""
-            $(document).ready(function () {
+        <div class="text_info clearfix"><span>角色：</span></div>
+        <div class="input_info_high">
+            <div class="input_info_scroll">
+                <ul id="ul">
+                </ul>
+            </div>
+            <span class="required">*</span>
+            <div id="div" class="validate_msg_tiny error_msg"></div>
+        </div>
+        <div class="button_info clearfix">
+            <input id="inp" type="button" value="保存" class="btn_save"/>
+            <input type="button" value="取消" class="btn_save"/>
+        </div>
+    </form>
+</div>
+<!--主要区域结束-->
+<div id="footer">
+    <span>[源自北美的技术，最优秀的师资，最真实的企业环境，最适用的实战项目]</span>
+    <br/>
+    <span>版权所有(C)云科技有限公司 </span>
+</div>
+<script type="application/javascript">
+    var adminId = ""
+    $(document).ready(function () {
 
-                $.ajax({
-                    url: "findAllRole_info",
-                    success: function (result) {
-                        alert(result)
-                        if (result.code == "0") {
-                            for (var i = 0; i < result.data.length; i++) {
-                                var roleInfo = result.data[i];
-                                var  roleName =$("<li></li>").append("<input id='input' type='checkbox' value='"+roleInfo.roleName+"'/>" + roleInfo.roleName)
-                                $("#ul").append(roleName)
-                            }
-                        }
+        $.ajax({
+            url: "findAllRole_info",
+            success: function (result) {
+                alert(result)
+                if (result.code == "0") {
+                    for (var i = 0; i < result.data.length; i++) {
+                        var roleInfo = result.data[i];
+                        var roleName = $("<li></li>").append("<input id='input' type='checkbox' value='" + roleInfo.roleId + "'/>" + roleInfo.roleName)
+                        $("#ul").append(roleName)
                     }
-                })
+                }
+            }
+        })
 
-                $.ajax({
-                    url:"lookAdmin",
-                    success:function (result) {
-                        adminId = result.data.adminId
-                        alert(adminId)
-                        document.getElementById("adminName").value =result.data.adminName;
-                        document.getElementById("adminCode").value =result.data.adminCode;
-                        document.getElementById("telephone").value =result.data.telephone;
-                        document.getElementById("email").value =result.data.email;
-                    }
-                })
-            });
-            $("#inp").click(function () {
-                var checkID = [];
-                $("input[type='checkbox']:checked").each(function (i) {
-                    checkID[i] = $(this).val();
-                });
-                var adminName = $("#adminName").val();
-                var adminCode =$("#adminCode").val();
-                var telephone =$("#telephone").val();
-                var email =$("#email").val();
-                $.ajax({
-                    url:"updateAdmin",
-                    data:{
-                        "adminId":adminId,
-                        "adminName":adminName,
-                        "adminCode":adminCode,
-                        "telephone":telephone,
-                        "email":email,
-                        "roleInfo":[checkID]
-                    },
-                    traditional: true,
-                    success:function (data) {
-                        if (data == "success") {
-                            window.location.href = "admin_list"
-                        }else if (data == "nameNull") {
-                            document.getElementById('div1').innerHTML = '<font style="color:red">不能为空, 必须在3~15个字符之间</font>'
-                        }else if (data == "telephoneError") {
-                            $('#div1').remove();
-                            document.getElementById('div2').innerHTML = '<font style="color:red">请输入正确的电话号码格式：手机或固话</font>'
-                        } else if (data == "emailError") {
-                            $('#div2').remove();
-                            document.getElementById('div3').innerHTML = '<font style="color:red">请输入正确的 email 格式</font>'
-                        }
-                    }
-                })
-            })
-            function role_ist() {
-                window.location.href = "role_1"
 
+        $.ajax({
+            url: "lookAdmin",
+            success: function (result) {
+                adminId = result.data.adminId
+                document.getElementById("adminName").value = result.data.adminName;
+                document.getElementById("adminCode").value = result.data.adminCode;
+                document.getElementById("telephone").value = result.data.telephone;
+                document.getElementById("email").value = result.data.email;
             }
-            function admin_list() {
-                window.location.href = "admin_list"
+        })
+    });
+    $("#inp").click(function () {
+        var checkID = [];
+        $("input[type='checkbox']:checked").each(function (i) {
+            checkID[i] = $(this).val();
+        });
+        var adminName = $("#adminName").val();
+        var adminCode = $("#adminCode").val();
+        var telephone = $("#telephone").val();
+        var email = $("#email").val();
+        $.ajax({
+            url: "updateAdmin",
+            data: {
+                "adminId": adminId,
+                "adminName": adminName,
+                "adminCode": adminCode,
+                "telephone": telephone,
+                "email": email,
+                "roleInfo": [checkID]
+            },
+            traditional: true,
+            success: function (data) {
+                if (data == "success") {
+                    window.location.href = "admin_list"
+                } else if (data == "nameNull") {
+                    document.getElementById('div1').innerHTML = '<font style="color:red">不能为空, 必须在3~15个字符之间</font>'
+                } else if (data == "telephoneError") {
+                    $('#div1').remove();
+                    document.getElementById('div2').innerHTML = '<font style="color:red">请输入正确的电话号码格式：手机或固话</font>'
+                } else if (data == "emailError") {
+                    $('#div2').remove();
+                    document.getElementById('div3').innerHTML = '<font style="color:red">请输入正确的 email 格式</font>'
+                }
+            }
+        })
+    })
+    function role_ist() {
+        window.location.href = "role_1"
 
-            }
-            function fee_list() {
-                window.location.href = "fee_list"
-            }
-            function account_list() {
-                window.location.href = "account_list"
-            }
-            function service_list() {
-                window.location.href = "service_list"
-            }
-            function bill_list() {
-                window.location.href = "bill_list"
-            }
-            function report_list() {
-                window.location.href = "report_list"
-            }
-            function user_info() {
-                window.location.href = "user_info"
-            }
-            function user_modi_pwd() {
-                window.location.href = "user_modi_pwd"
-            }
+    }
+    function admin_list() {
+        window.location.href = "admin_list"
 
-        </script>
-    </body>
+    }
+    function fee_list() {
+        window.location.href = "fee_list"
+    }
+    function account_list() {
+        window.location.href = "account_list"
+    }
+    function service_list() {
+        window.location.href = "service_list"
+    }
+    function bill_list() {
+        window.location.href = "bill_list"
+    }
+    function report_list() {
+        window.location.href = "report_list"
+    }
+    function user_info() {
+        window.location.href = "user_info"
+    }
+    function user_modi_pwd() {
+        window.location.href = "user_modi_pwd"
+    }
+
+</script>
+</body>
 </html>

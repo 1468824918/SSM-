@@ -18,6 +18,7 @@ import static org.junit.Assert.*;
 public class CostMapperTest {
 
 
+
     @Resource
     private CostMapper costMapper;
 
@@ -30,6 +31,21 @@ public class CostMapperTest {
     public void update() throws Exception {
         Cost cost = new Cost(6);
         costMapper.update(cost);
+    }
+
+    @Test
+    public void findCostById() throws Exception {
+        costMapper.findCostById("1");
+    }
+
+    @Test
+    public void findCostDesc() throws Exception {
+        costMapper.findCostDesc();
+    }
+
+    @Test
+    public void findCostTime() throws Exception {
+        costMapper.findCostTime();
     }
 
 }

@@ -205,7 +205,7 @@
                 if (result.code == "0") {
                     for (var i = 0; i < result.data.length; i++) {
                         var roleInfo = result.data[i];
-                        var  roleName =$("<li></li>").append("<input id='input' type='checkbox' value='"+roleInfo.roleName+"'/>" + roleInfo.roleName)
+                        var  roleName =$("<li></li>").append("<input id='input' type='checkbox' value='"+roleInfo.roleId+"'/>" + roleInfo.roleName)
                         $("#ul").append(roleName)
                     }
                 }

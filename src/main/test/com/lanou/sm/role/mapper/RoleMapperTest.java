@@ -52,7 +52,7 @@ public class RoleMapperTest {
 
     @Test
     public void deleteRoleModule() throws Exception {
-        RoleInfo info = new RoleInfo(832,"123");
+        RoleInfo info = new RoleInfo(314,"123");
         roleMapper.deleteRoleModule(info);
     }
 
@@ -62,5 +62,16 @@ public class RoleMapperTest {
     public void deleteUpdateRole() throws Exception {
         RoleInfo info = new RoleInfo("苏烈");
         roleMapper.deleteUpdateRole(info);
+    }
+
+    @Test
+    public void findModule_Info() throws Exception {
+        roleMapper.findModule_Info();
+    }
+
+    @Test
+    public void updateRoleInfoById() throws Exception {
+        RoleInfo info = new RoleInfo(314,"苏烈");
+        roleMapper.updateRoleInfoById(info);
     }
 }

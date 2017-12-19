@@ -14,6 +14,8 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by dllo on 17/12/2.
@@ -32,12 +34,12 @@ public class AdminServiceImpl implements AdminService {
             return "adminCode";
         } else if (admin.getAdminCode().trim().length() < 3 || admin.getAdminCode().trim().length() > 8) {
             return "adminCodeLength";
-        } else if (admins == null || !admins.getAdminCode().equals(admin.getAdminCode())) {
-            return "adminMsg";
         } else if ("".equals(admin.getPassword())) {
             return "Password";
         } else if (admin.getPassword().trim().length() < 3 || admin.getPassword().trim().length() > 8) {
             return "PasswordLength";
+        } else if (admins == null || !admins.getAdminCode().equals(admin.getAdminCode())) {
+            return "adminMsg";
         } else if (!admins.getPassword().equals(admin.getPassword())) {
             return "passwordMsg";
         } else if ("".equals(code) || !code.equalsIgnoreCase(codes)) {
@@ -53,6 +55,15 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public String insertAdmin(Admin admin, String againPassword) {
+        //手机号正则表达式
+        Pattern regex = Pattern.compile("^(((13[0-9])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8})|(0\\d{2}-\\d{8})|(0\\d{3}-\\d{7})$");
+        Matcher matcher = regex.matcher(admin.getTelephone());
+
+        //邮箱正则表达式
+        String email = "^([a-z0-9A-Z]+[-|_|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+        Pattern regexs = Pattern.compile(email);
+        Matcher matchers = regexs.matcher(admin.getEmail());
+
         if ("".equals(admin.getAdminName()) || admin.getAdminName() == null || admin.getAdminName().trim().length() < 3 || admin.getAdminName().trim().length() > 15) {
             return "nameNull";
         } else if (admin.getAdminCode().trim().length() < 3 || admin.getAdminCode().trim().length() > 15) {
@@ -61,9 +72,9 @@ public class AdminServiceImpl implements AdminService {
             return "passwordError";
         } else if (!againPassword.equals(admin.getPassword())) {
             return "againPasswordError";
-        } else if ("^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8}$".equals(admin.getTelephone()) || "^(0\\d{2}-\\d{8}(-\\d{1,4})?)|(0\\d{3}-\\d{7,8}(-\\d{1,4})?)$".equals(admin.getTelephone()) || "".equals(admin.getTelephone())) {
+        } else if (!matcher.matches()) {
             return "telephoneError";
-        } else if ("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$".equals(admin.getEmail()) || "".equals(admin.getEmail())) {
+        } else if (!matchers.matches()) {
             return "emailError";
         } else if (admin.getRoleInfo().length == 0) {
             return "roleInfoNameError";
@@ -73,16 +84,9 @@ public class AdminServiceImpl implements AdminService {
             admin.setEnrollDate(a.getEnrollDate());
             adminMapper.insertAdmin(admin);
 
-            //查询插入的管理员
-            Admin insertAdmin = adminMapper.findInsertAdmin(admin);
-
             for (RoleInfo info : admin.getRoleInfo()) {
-                //根据名字插入角色
-                adminMapper.insertRoleInfo(info);
-                //查询插入的角色
-                RoleInfo role = adminMapper.findInsertRoleInfo(info);
-                //向中间表插入数据
-                adminMapper.insertAdminRole(insertAdmin.getAdminId(), role.getRoleId());
+                int s = Integer.parseInt(info.getRoleName());
+                adminMapper.insertAdminRole(admin.getAdminId(), s);
             }
             return "success";
         }
@@ -91,8 +95,6 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public String deleteAdmin(Admin admin) {
         List<AdminRole> adminAndRole = adminMapper.findAdminAndRole(admin);
-        adminMapper.deleteRole_Info(adminAndRole);
-        adminMapper.deleteRoleModule(adminAndRole);
         adminMapper.deleteAdmin_role(admin);
         adminMapper.deleteAdmin(admin);
         return "success";
@@ -100,16 +102,23 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public String updateAdmin(Admin admin) {
+        //手机号正则表达式
+        Pattern regex = Pattern.compile("^(((13[0-9])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8})|(0\\d{2}-\\d{8})|(0\\d{3}-\\d{7})$");
+        Matcher matcher = regex.matcher(admin.getTelephone());
+
+        //邮箱正则表达式
+        String email = "^([a-z0-9A-Z]+[-|_|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+        Pattern regexs = Pattern.compile(email);
+        Matcher matchers = regexs.matcher(admin.getEmail());
+
         if ("".equals(admin.getAdminName()) || admin.getAdminName() == null || admin.getAdminName().trim().length() < 3 || admin.getAdminName().trim().length() > 15) {
             return "nameNull";
-        } else if ("^((13[0-9])|(14[5|7])|(15([0-3]|[5-9]))|(18[0,5-9]))\\d{8}$".equals(admin.getTelephone()) || "^(0\\d{2}-\\d{8}(-\\d{1,4})?)|(0\\d{3}-\\d{7,8}(-\\d{1,4})?)$".equals(admin.getTelephone()) || "".equals(admin.getTelephone())) {
+        } else if (!matcher.matches()) {
             return "telephoneError";
-        } else if ("^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\\.[a-zA-Z0-9_-]+)+$".equals(admin.getEmail()) || "".equals(admin.getEmail())) {
+        } else if (!matchers.matches()) {
             return "emailError";
         } else {
             List<AdminRole> adminRoleList = adminMapper.findAdminAndRole(admin);
-            adminMapper.deleteRole_Info(adminRoleList);
-            adminMapper.deleteRoleModule(adminRoleList);
             adminMapper.deleteAdmin_role(admin);
 
 
@@ -118,13 +127,9 @@ public class AdminServiceImpl implements AdminService {
             adminMapper.updateAdmin(admin);
 
             for (RoleInfo roleInfo : admin.getRoleInfo()) {
-                RoleInfo role = new RoleInfo();
-                role.setRoleName(roleInfo.getRoleName());
-                adminMapper.insertRoleInfo(role);
-
-                RoleInfo updateRoleInfo = adminMapper.findInsertRoleInfo(role);
-
-                adminMapper.insertAdminRole(admin.getAdminId(), updateRoleInfo.getRoleId());
+                int s = Integer.parseInt(roleInfo.getRoleName());
+                System.out.println(s);
+                adminMapper.insertAdminRole(admin.getAdminId(), s);
             }
 
         }

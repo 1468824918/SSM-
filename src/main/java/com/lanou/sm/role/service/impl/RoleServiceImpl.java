@@ -54,14 +54,8 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public String insertUpdateRoleInfo(RoleInfo roleInfo, String[] moduleId) {
-        //查询要删除的人
-        RoleInfo deleteRoleInfo = roleMapper.findRoleInfo(roleInfo);
-
-        //根据名字删除人
-        roleMapper.deleteUpdateRole(roleInfo);
-
-        //根据id删除中间表的id
-        roleMapper.deleteRoleModule(deleteRoleInfo);
+        roleMapper.updateRoleInfoById(roleInfo);
+        roleMapper.deleteRoleModule(roleInfo);
 
         //重新插入
         if ("".equals(roleInfo.getRoleName()) || roleInfo.getRoleName() == null) {
@@ -69,7 +63,6 @@ public class RoleServiceImpl implements RoleService {
         } else if (moduleId.length == 0) {
             return "IntegerError";
         } else {
-            roleMapper.insertRole(roleInfo);
             RoleInfo info = roleMapper.findRoleInfo(roleInfo);
             for (String str : moduleId) {
                 ModuleInfo module = new ModuleInfo();
@@ -81,5 +74,10 @@ public class RoleServiceImpl implements RoleService {
             }
         }
         return "success";
+    }
+
+    @Override
+    public List<ModuleInfo> findModule_Info() {
+        return roleMapper.findModule_Info();
     }
 }

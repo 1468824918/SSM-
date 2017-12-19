@@ -2,6 +2,7 @@ package com.lanou.sm.admin.mapper;
 
 import com.lanou.sm.admin.domain.Admin;
 import com.lanou.sm.admin.domain.AdminRole;
+import com.lanou.sm.admin.utils.PageBean;
 import com.lanou.sm.role.domain.ModuleInfo;
 import com.lanou.sm.role.domain.RoleInfo;
 import org.apache.ibatis.annotations.Param;
@@ -73,6 +74,17 @@ public interface AdminMapper {
 
     //查询角色role_info表
     List<RoleInfo> findAllRole_info();
+
+
+
+
+
+    //分页
+    List<Admin> findAdminAndStartAndPageSize(int startPos,int pageSize);
+
+    //查询有多少条数据
+    PageBean<Admin> findAdminByPage();
+
 
 
 

@@ -1,6 +1,7 @@
 package com.lanou.sm.admin.mapper;
 import com.lanou.sm.admin.domain.Admin;
 import com.lanou.sm.admin.domain.AdminRole;
+import com.lanou.sm.admin.utils.PageBean;
 import com.lanou.sm.role.domain.ModuleInfo;
 import com.lanou.sm.role.domain.RoleInfo;
 import com.lanou.sm.role.mapper.RoleMapper;
@@ -145,6 +146,17 @@ public class AdminMapperTest {
     public void findAllRole_info() throws Exception {
         List<RoleInfo> allRole_info = adminMapper.findAllRole_info();
         System.out.println(allRole_info);
+    }
+
+    @Test
+    public void findAdminAndStartAndPageSize() throws Exception {
+        adminMapper.findAdminAndStartAndPageSize(0,5);
+    }
+
+    @Test
+    public void findAdminByPage() throws Exception {
+        PageBean<Admin> adminByPage = adminMapper.findAdminByPage();
+        System.out.println(adminByPage);
     }
 
 }

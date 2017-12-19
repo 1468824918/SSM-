@@ -71,21 +71,6 @@
                     <th class="width50">状态</th>
                     <th class="width200"></th>
                 </tr>
-                <tr>
-                    <td>1</td>
-                    <td><a href="fee_detail.html">包 20 小时</a></td>
-                    <td>20 小时</td>
-                    <td>24.50 元</td>
-                    <td>3.00 元/小时</td>
-                    <td>2013/01/01 00:00:00</td>
-                    <td></td>
-                    <td>暂停</td>
-                    <td>
-                        <input type="button" value="启用" class="btn_start" onclick="startFee();"/>
-                        <input type="button" value="修改" class="btn_modify" onclick="location.href='fee_modi.html';"/>
-                        <input type="button" value="删除" class="btn_delete" onclick="deleteFee();"/>
-                    </td>
-                </tr>
             </table>
             <p>业务说明：<br/>
                 1、创建资费时，状态为暂停，记载创建时间；<br/>
@@ -185,7 +170,7 @@
                             var cost = result.data[i];
                             if (null != cost) {
                                 var costId = $("<td></td>").text(cost.costId);
-                                var costName = $("<td></td>").text(cost.costName);
+                                var costName = $("<td id='costName' onclick='fee_detail(this)' ></td>").text(cost.costName);
                                 var base_duration = $("<td></td>").text(cost.base_duration);
                                 var base_cost = $("<td></td>").text(cost.base_cost);
                                 var unit_cost = $("<td></td>").text(cost.unit_cost + ".00 元/小时");
@@ -231,6 +216,25 @@
     function updateCost() {
         window.location.href = "updateCost";
     }
+    function fee_detail() {
+        $("#datalist tr").click(function () {
+            var td = $(this).find("td");
+            var costId = td.eq(0).html();
+            $.ajax({
+                url: "fee_detail",
+                data:{
+                    "costId":costId,
+                },
+                success: function (result) {
+                    alert(result)
+                    if (result == "success") {
+                        window.location = 'detail';
+                    }
+                }
+            })
+        });
+//        window.location.href="fee_detail"
+    }
 
     //查询资费
     $(document).ready(function () {
@@ -242,7 +246,7 @@
                         var cost = result.data[i];
                         if (null != cost) {
                             var costId = $("<td></td>").text(cost.costId);
-                            var costName = $("<td></td>").text(cost.costName);
+                            var costName = $("<td id='costName' onclick='fee_detail(this)'></td>").text(cost.costName);
                             var base_duration = $("<td></td>").text(cost.base_duration);
                             var base_cost = $("<td></td>").text(cost.base_cost);
                             var unit_cost = $("<td></td>").text(cost.unit_cost + ".00 元/小时");

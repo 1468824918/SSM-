@@ -1,9 +1,11 @@
 package com.lanou.sm.role.controller;
 
 import com.lanou.sm.admin.utils.AjaxResult;
+import com.lanou.sm.cost.domain.Cost;
 import com.lanou.sm.role.domain.ModuleInfo;
 import com.lanou.sm.role.domain.RoleInfo;
 import com.lanou.sm.role.service.RoleService;
+import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -70,4 +72,12 @@ public class RoleController {
         String s = roleService.insertUpdateRoleInfo(roleInfo, moduleId);
         return s;
     }
+
+    @RequestMapping("findModuleInfo")
+    @ResponseBody
+    public AjaxResult findModule_Info(){
+        return new AjaxResult(roleService.findModule_Info());
+    }
+
+
 }

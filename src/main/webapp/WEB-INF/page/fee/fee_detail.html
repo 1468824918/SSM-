@@ -1,17 +1,18 @@
-﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
         <title></title>
         <link type="text/css" rel="stylesheet" media="all" href="/styles/global.css" />
         <link type="text/css" rel="stylesheet" media="all" href="/styles/global_color.css" />
+        <script src="/jquery-3.2.1.js"></script>
     </head>
     <body>
         <!--Logo区域开始-->
-        <div id="header">
-            <img src=/images/logo.png" alt="logo" class="left"/>
-            <a href="#">[退出]</a>            
-        </div>
+        <!--<div id="header">-->
+            <!--<img src=/images/logo.png" alt="logo" class="left"/>-->
+            <!--<a href="#">[退出]</a>            -->
+        <!--</div>-->
         <!--Logo区域结束-->
         <!--导航区域开始-->
         <div id="navi">
@@ -33,12 +34,16 @@
         <div id="main">            
             <form action="" method="" class="main_form">
                 <div class="text_info clearfix"><span>资费ID：</span></div>
-                <div class="input_info"><input type="text" class="readonly" readonly value="1" /></div>
+                <div class="input_info">
+                    <input id="costId" type="text" class="readonly" readonly value="" />
+                </div>
                 <div class="text_info clearfix"><span>资费名称：</span></div>
-                <div class="input_info"><input type="text" class="readonly" readonly value="包 20 小时"/></div>
+                <div class="input_info">
+                    <input id="costName" type="text" class="readonly" readonly value=""/>
+                </div>
                 <div class="text_info clearfix"><span>资费状态：</span></div>
                 <div class="input_info">
-                    <select class="readonly" disabled>
+                    <select id="status" class="readonly" disabled>
                         <option>开通</option>
                         <option>暂停</option>
                         <option>删除</option>
@@ -53,28 +58,32 @@
                     <input type="radio" name="radFeeType" checked="checked" id="timeBased" disabled="disabled" />
                     <label for="timeBased">计时</label>
                 </div>
-                <div class="text_info clearfix"><span>基本时长：</span></div>
+                <div class="text_info clearfix">
+                    <span>基本时长：</span></div>
                 <div class="input_info">
-                    <input type="text" class="readonly" readonly value="20"  />
+                    <input id="base_duration" type="text" class="readonly" readonly value=""  />
                     <span>小时</span>
                 </div>
                 <div class="text_info clearfix"><span>基本费用：</span></div>
                 <div class="input_info">
-                    <input type="text"  class="readonly" readonly value="24.5" />
+                    <input id="base_cost" type="text"  class="readonly" readonly value="" />
                     <span>元</span>
                 </div>
                 <div class="text_info clearfix"><span>单位费用：</span></div>
                 <div class="input_info">
-                    <input type="text"  class="readonly" readonly value="3.00" />
+                    <input id="unit_cost" type="text"  class="readonly" readonly value="" />
                     <span>元/小时</span>
                 </div>
                 <div class="text_info clearfix"><span>创建时间：</span></div>
-                <div class="input_info"><input type="text"  class="readonly" readonly value="2013/1/1 00:00:00" /></div>      
+                <div class="input_info">
+                    <input id="creaTime" type="text"  class="readonly" readonly value="" /></div>
                 <div class="text_info clearfix"><span>启动时间：</span></div>
-                <div class="input_info"><input type="text"  class="readonly" readonly value="2013/1/1 00:00:00" /></div>      
-                <div class="text_info clearfix"><span>资费说明：</span></div>
+                <div class="input_info">
+                    <input id="starTime" type="text"  class="readonly" readonly value="" /></div>
+                <div class="text_info clearfix">
+                    <span>资费说明：</span></div>
                 <div class="input_info_high">
-                    <textarea class="width300 height70 readonly" readonly>包 20 小时，20 小时以内 24.5 元，超出部分 3.00 元/小时</textarea>
+                    <textarea id="descr" class="width300 height70 readonly" readonly></textarea>
                 </div>                    
                 <div class="button_info clearfix">
                     <input type="button" value="返回" class="btn_save" onclick="location.href='fee_list.html';" />
@@ -87,7 +96,8 @@
             <br />
             <span>版权所有(C)云科技有限公司 </span>
         </div>
-        <script type="application/javascript" src="/jquery-3.2.1.js">
+    </body>
+        <script type="application/javascript">
             function role_ist() {
                 window.location.href = "role_1"
 
@@ -117,6 +127,21 @@
             function user_modi_pwd() {
                 window.location.href = "user_modi_pwd"
             }
+            $(document).ready(function () {
+                $.ajax({
+                    url:"findCostById",
+                    success:function (result) {
+                        document.getElementById("costId").value =result.data.costId;
+                        document.getElementById("costName").value =result.data.costName;
+                        document.getElementById("status").value =result.data.status;
+                        document.getElementById("base_duration").value =result.data.base_duration;
+                        document.getElementById("base_cost").value =result.data.base_cost;
+                        document.getElementById("unit_cost").value =result.data.unit_cost;
+                        document.getElementById("creaTime").value =result.data.creaTime;
+                        document.getElementById("starTime").value =result.data.starTime;
+                        document.getElementById("descr").value =result.data.descr;
+                    }
+                })
+            })
         </script>
-    </body>
 </html>

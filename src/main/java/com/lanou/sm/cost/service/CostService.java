@@ -13,4 +13,10 @@ public interface CostService {
     String deleteCost(Cost cost);
 
     List<Cost> updateCost(Cost cost);
+
+    Cost findCostById(String costId);
+
+    List<Cost> findCostDesc();
+
+    List<Cost> findCostTime();
 }

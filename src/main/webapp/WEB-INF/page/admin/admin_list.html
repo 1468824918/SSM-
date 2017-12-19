@@ -77,6 +77,7 @@
         <!--数据区域：用表格展示数据-->
         <div id="data">
             <table id="datalist">
+                <thead>
                 <tr>
                     <th class="th_select_all">
                         <input type="checkbox" onclick="selectAdmins(this);"/>
@@ -91,6 +92,8 @@
                     <th class="width100">拥有角色</th>
                     <th></th>
                 </tr>
+                </thead>
+                <tbody></tbody>
             </table>
         </div>
     </form>
@@ -181,6 +184,7 @@
             var adminCode = td.eq(2).html();
             var telephone = td.eq(3).html();
             var email = td.eq(4).html();
+            var roleName = td.eq(6).html();
             $.ajax({
                 url: "skipAdmin_modi",
                 data: {
@@ -188,7 +192,8 @@
                     "adminId": adminId,
                     "adminCode": adminCode,
                     "telephone": telephone,
-                    "email": email
+                    "email": email,
+                    "roleInfoList":roleName
                 },
                 success: function (result) {
                     alert(result)
@@ -244,11 +249,9 @@
             },
             traditional: true,
             success: function (result) {
-                console.log(result)
-                alert(result)
                 if (result.code == "0") {
+                    $("#datalist tbody").html("");
                     for (var i = 0; i < result.data.length; i++) {
-                        $("#tr").remove();
                         var admin = result.data[i];
                         if (null != admin.roleInfoList[0]) {
                             var option = $("<th></th>").append('<input type="checkbox" class="content" />');
@@ -271,27 +274,28 @@
                                     .append(roleName)
                                     .append(p);
                             $("#datalist").append(tr)
-                        }else if (admin.roleInfoList[0]==null){
-                            var option = $("<th></th>").append('<input type="checkbox" class="content" />');
-                            var adminId = $("<td></td>").text(admin.adminId);
-                            var adminCode = $("<td></td>").text(admin.adminName);
-                            var password = $("<td></td>").text(admin.adminCode);
-                            var telephone = $("<td></td>").text(admin.telephone);
-                            var email = $("<td></td>").text(admin.email);
-                            var enrollDate = $("<td></td>").text(admin.enrollDate);
-                            var roleName = $("<td></td>").text(admin.roleInfoList.roleName);
-                            var p = $("<td></td>").append('<input id="update" type="button" onclick="updateRole(this)" value="修改" class="btn_modify"/>' + '<input onclick="deleteRole(this)"  type="button" value="删除" class="btn_delete" />');
-                            var tr = $("<tr id='tr'></tr>")
-                                    .append(option)
-                                    .append(adminId)
-                                    .append(adminCode)
-                                    .append(password)
-                                    .append(telephone)
-                                    .append(email)
-                                    .append(enrollDate)
-                                    .append(roleName)
-                                    .append(p);
-                            $("#datalist").append(tr)
+                        }
+                        else if (admin.roleInfoList[0]==null){
+//                            var option = $("<th></th>").append('<input type="checkbox" class="content" />');
+//                            var adminId = $("<td></td>").text(admin.adminId);
+//                            var adminCode = $("<td></td>").text(admin.adminName);
+//                            var password = $("<td></td>").text(admin.adminCode);
+//                            var telephone = $("<td></td>").text(admin.telephone);
+//                            var email = $("<td></td>").text(admin.email);
+//                            var enrollDate = $("<td></td>").text(admin.enrollDate);
+//                            var roleName = $("<td></td>").text(admin.roleInfoList.roleName);
+//                            var p = $("<td></td>").append('<input id="update" type="button" onclick="updateRole(this)" value="修改" class="btn_modify"/>' + '<input onclick="deleteRole(this)"  type="button" value="删除" class="btn_delete" />');
+//                            var tr = $("<tr id='tr'></tr>")
+//                                    .append(option)
+//                                    .append(adminId)
+//                                    .append(adminCode)
+//                                    .append(password)
+//                                    .append(telephone)
+//                                    .append(email)
+//                                    .append(enrollDate)
+//                                    .append(roleName)
+//                                    .append(p);
+//                            $("#datalist").append(tr)
                         }
                     }
                 }

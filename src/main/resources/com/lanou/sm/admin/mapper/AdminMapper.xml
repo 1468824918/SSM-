@@ -52,6 +52,9 @@
 
 
     <insert id="insertAdmin">
+        <selectKey keyProperty="adminId" order="AFTER" resultType="int">
+            SELECT last_insert_id()
+        </selectKey>
         INSERT INTO admin_info
         VALUES (#{adminId}, #{adminCode}, #{password}, #{adminName}, #{telephone}, #{email}, #{enrollDate})
     </insert>
@@ -123,7 +126,7 @@
     <select id="findInsertAdmin" resultType="com.lanou.sm.admin.domain.Admin" resultMap="adminMap">
         SELECT *
         FROM admin_info
-        WHERE name = #{adminName}
+        WHERE admin_id = #{adminId}
     </select>
     <select id="findInsertRoleInfo" resultType="com.lanou.sm.role.domain.RoleInfo" resultMap="roleMap">
         SELECT *
@@ -161,6 +164,12 @@
     </select>
     <select id="findAllRole_info" resultType="com.lanou.sm.role.domain.RoleInfo" resultMap="roleMap">
         SELECT * FROM role_info GROUP BY role_name HAVING count(role_name)
+    </select>
+    <select id="findAdminAndStartAndPageSize" resultType="com.lanou.sm.admin.domain.Admin" resultMap="adminMap">
+        Select * from admin_info limit #{0},#{1}
+    </select>
+    <select id="findAdminByPage" resultType="com.lanou.sm.admin.domain.Admin" >
+        select count(*) from admin_info
     </select>
 
 </mapper>
