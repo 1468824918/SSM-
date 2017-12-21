@@ -79,6 +79,22 @@
         </set>
         where admin_id =#{adminId}
     </update>
+    <update id="updatePiAdmin">
+        UPDATE admin_info
+        <set>
+            <if test="adminName != null and adminName != ''">name=#{adminName},</if>
+            <if test="telephone != null and telephone != ''">telephone=#{telephone},</if>
+            <if test="email != null and email != ''">email=#{email},</if>
+        </set>
+        where admin_id =#{adminId}
+    </update>
+    <update id="updatePassword">
+        UPDATE admin_info
+        <set>
+            <if test="password != null and password != ''">password=#{password},</if>
+        </set>
+        where admin_id =#{adminId}
+    </update>
     <delete id="deleteAdmin">
         DELETE FROM admin_info
         WHERE admin_id = #{adminId}
@@ -170,6 +186,21 @@
     </select>
     <select id="findAdminByPage" resultType="com.lanou.sm.admin.domain.Admin" >
         select count(*) from admin_info
+    </select>
+    <select id="findAdminBySession" resultType="com.lanou.sm.admin.domain.Admin" resultMap="adminMap">
+        SELECT
+            a.admin_id   admin_id,
+            a.admin_code admin_code,
+            a.password   password,
+            a.name       name,
+            a.telephone  telephone,
+            a.email      email,
+            a.enrolldate enrolldate,
+            group_concat(ri.role_name SEPARATOR',')
+                role_name
+            FROM admin_info a LEFT JOIN (admin_role ar ,role_info ri)
+                    ON a.admin_id=ar.admin_id
+                       AND ar.role_id=ri.role_id WHERE a.admin_id=#{adminId} ;
     </select>
 
 </mapper>

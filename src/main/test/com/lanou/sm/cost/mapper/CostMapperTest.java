@@ -45,7 +45,7 @@ public class CostMapperTest {
 
     @Test
     public void findCostTime() throws Exception {
-        costMapper.findCostTime();
+        costMapper.findCostTimeDesc();
     }
 
 }

@@ -82,7 +82,7 @@ public class CostController {
     }
 
     /**
-     * 基费
+     * 时长
      * @return
      */
     @RequestMapping("findCostDesc")
@@ -91,14 +91,29 @@ public class CostController {
         return new AjaxResult(costService.findCostDesc());
     }
 
+    @RequestMapping("findCostAsc")
+    @ResponseBody
+    public AjaxResult findCostAsc(){
+        return new AjaxResult(costService.findCostAsc());
+    }
+
     /**
-     * 时长
+     * 基费
      * @return
      */
-    @RequestMapping("findCostTime")
+    @RequestMapping("findCostTimeDesc")
     @ResponseBody
-    public AjaxResult findCostTime(){
-        return new AjaxResult(costService.findCostTime());
+    public AjaxResult findCostTimeDesc(){
+        return new AjaxResult(costService.findCostTimeDesc());
     }
+
+    @RequestMapping("findCostTimeAsc")
+    @ResponseBody
+    public AjaxResult findCostTimeAsc(){
+        return new AjaxResult(costService.findCostTimeAsc());
+    }
+
+
+
 
 }

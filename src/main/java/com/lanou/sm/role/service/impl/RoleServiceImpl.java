@@ -80,4 +80,9 @@ public class RoleServiceImpl implements RoleService {
     public List<ModuleInfo> findModule_Info() {
         return roleMapper.findModule_Info();
     }
+
+    @Override
+    public RoleInfo findRoleInfoAndModuleInfo(RoleInfo roleInfo) {
+        return roleMapper.findRoleInfoAndModuleInfo(roleInfo);
+    }
 }

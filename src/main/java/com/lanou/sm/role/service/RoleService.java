@@ -18,4 +18,6 @@ public interface RoleService {
     String insertUpdateRoleInfo(RoleInfo roleInfo,String[] moduleId);
 
     List<ModuleInfo> findModule_Info();
+
+    RoleInfo findRoleInfoAndModuleInfo(RoleInfo roleInfo);
 }

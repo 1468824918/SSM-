@@ -1,6 +1,7 @@
 package com.lanou.sm.admin.service;
 
 import com.lanou.sm.admin.domain.Admin;
+import com.lanou.sm.admin.utils.PageBean;
 import com.lanou.sm.role.domain.ModuleInfo;
 import com.lanou.sm.role.domain.RoleInfo;
 import org.apache.ibatis.annotations.Param;
@@ -29,5 +30,19 @@ public interface AdminService {
     List<Admin> likeAdmin( ModuleInfo moduleInfo,String roleName);
 
     List<RoleInfo> findAllRole_info();
+
+    Admin findAdminBySession(Admin admin);
+
+    String updatePiAdmin(Admin admin);
+
+    String updatePassword(String oldPassword,String password,String againPassword,HttpSession session);
+
+
+
+    //分页
+    List<Admin> findAdminAndStartAndPageSize(int startPos,int pageSize);
+
+    //查询有多少条数据
+    PageBean<Admin> findAdminByPage();
 
 } 

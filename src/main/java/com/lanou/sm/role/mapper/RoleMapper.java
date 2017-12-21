@@ -20,8 +20,11 @@ public interface RoleMapper {
     //中间表插入数据
     int insertRoleModule(RoleInfo roleInfo);
 
-    //根据名字查找人
+    //根据id查找人
     RoleInfo findRoleInfo(RoleInfo roleInfo);
+
+
+    RoleInfo findRoleInfoAndModuleInfo(RoleInfo roleInfo);
 
     //删除角色
     int deleteRole(RoleInfo roleInfo);

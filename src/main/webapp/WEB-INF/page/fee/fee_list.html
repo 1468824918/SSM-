@@ -1,20 +1,13 @@
-﻿﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title></title>
     <link type="text/css" rel="stylesheet" media="all" href="/styles/global.css"/>
     <link type="text/css" rel="stylesheet" media="all" href="/styles/global_color.css"/>
-    <script language="javascript" type="text/javascript" src="/jquery-3.2.1.js">
-        //排序按钮的点击事件
-        function sort(btnObj) {
-            if (btnObj.className == "sort_desc")
-                btnObj.className = "sort_asc";
-            else
-                btnObj.className = "sort_desc";
-        }
-
-
+    <script src="/jquery-3.2.1.js"></script>
+    <script language="javascript" type="text/javascript">
     </script>
 </head>
 <body>
@@ -47,8 +40,8 @@
         <div class="search_add">
             <div>
                 <!--<input type="button" value="月租" class="sort_asc" onclick="sort(this);" />-->
-                <input type="button" value="基费" class="sort_asc" onclick="sort(this);"/>
-                <input type="button" value="时长" class="sort_asc" onclick="sort(this);"/>
+                <input type="button" value="基费" class="sort_asc" onclick="sortBasefee(this);"/>
+                <input type="button" value="时长" class="sort_asc" onclick="sortWhenlong(this);"/>
             </div>
             <input type="button" value="增加" class="btn_add" onclick="fee_add()"/>
         </div>
@@ -60,6 +53,7 @@
         <!--数据区域：用表格展示数据-->
         <div id="data">
             <table id="datalist">
+                <thead>
                 <tr>
                     <th>资费ID</th>
                     <th class="width100">资费名称</th>
@@ -71,6 +65,10 @@
                     <th class="width50">状态</th>
                     <th class="width200"></th>
                 </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
             </table>
             <p>业务说明：<br/>
                 1、创建资费时，状态为暂停，记载创建时间；<br/>
@@ -222,8 +220,8 @@
             var costId = td.eq(0).html();
             $.ajax({
                 url: "fee_detail",
-                data:{
-                    "costId":costId,
+                data: {
+                    "costId": costId,
                 },
                 success: function (result) {
                     alert(result)
@@ -287,6 +285,219 @@
         })
     })
 
+    //排序按钮的点击事件
+    function sortBasefee(btnObj) {
+        if (btnObj.className == "sort_asc")
+            btnObj.className = "sort_desc";
+        else {
+            btnObj.className = "sort_asc";
+        }
+        if (btnObj.className == "sort_desc") {
+            $("#datalist tbody").html("");
+            $.ajax({
+                url: "findCostTimeAsc",
+                success: function (result) {
+                    if (result.code == "0") {
+                        for (var i = 0; i < result.data.length; i++) {
+                            var cost = result.data[i];
+                            if (null != cost) {
+                                var costId = $("<td></td>").text(cost.costId);
+                                var costName = $("<td id='costName' onclick='fee_detail(this)'></td>").text(cost.costName);
+                                var base_duration = $("<td></td>").text(cost.base_duration);
+                                var base_cost = $("<td></td>").text(cost.base_cost);
+                                var unit_cost = $("<td></td>").text(cost.unit_cost + ".00 元/小时");
+                                var creaTime = $("<td></td>").text(cost.creaTime);
+                                var starTime = $("<td></td>").text(cost.starTime);
+                                var status = $("<td></td>").text(cost.status);
+                                if (cost.status == "1") {
+                                    var tr = $("<tr id='tr'></tr>")
+                                            .append(costId)
+                                            .append(costName)
+                                            .append(base_duration)
+                                            .append(base_cost)
+                                            .append(unit_cost)
+                                            .append(creaTime)
+                                            .append(starTime)
+                                            .append(status);
+                                    $("#datalist").append(tr)
+                                } else {
+                                    var p = $("<td></td>").append('<input type="button" value="启用" class="btn_start" onclick="startFee()"/>'
+                                            + '<input id="update" type="button" onclick="updateCost(this)" value="修改" class="btn_modify"/>'
+                                            + '<input onclick="deleteFee(this)"  type="button" value="删除" class="btn_delete" />');
+                                    var tr = $("<tr id='tr'></tr>")
+                                            .append(costId)
+                                            .append(costName)
+                                            .append(base_duration)
+                                            .append(base_cost)
+                                            .append(unit_cost)
+                                            .append(creaTime)
+                                            .append(starTime)
+                                            .append(status)
+                                            .append(p);
+                                    $("#datalist").append(tr)
+                                }
+                            }
+                        }
+                    }
+
+                }
+            })
+        } else
+            $.ajax({
+                url:"findCostTimeDesc",
+                success:function (result) {
+                    $("#datalist tbody").html("");
+                    if (result.code == "0") {
+                        for (var i = 0; i < result.data.length; i++) {
+                            var cost = result.data[i];
+                            if (null != cost) {
+                                var costId = $("<td></td>").text(cost.costId);
+                                var costName = $("<td id='costName' onclick='fee_detail(this)'></td>").text(cost.costName);
+                                var base_duration = $("<td></td>").text(cost.base_duration);
+                                var base_cost = $("<td></td>").text(cost.base_cost);
+                                var unit_cost = $("<td></td>").text(cost.unit_cost + ".00 元/小时");
+                                var creaTime = $("<td></td>").text(cost.creaTime);
+                                var starTime = $("<td></td>").text(cost.starTime);
+                                var status = $("<td></td>").text(cost.status);
+                                if (cost.status == "1") {
+                                    var tr = $("<tr id='tr'></tr>")
+                                            .append(costId)
+                                            .append(costName)
+                                            .append(base_duration)
+                                            .append(base_cost)
+                                            .append(unit_cost)
+                                            .append(creaTime)
+                                            .append(starTime)
+                                            .append(status);
+                                    $("#datalist").append(tr)
+                                } else {
+                                    var p = $("<td></td>").append('<input type="button" value="启用" class="btn_start" onclick="startFee()"/>'
+                                            + '<input id="update" type="button" onclick="updateCost(this)" value="修改" class="btn_modify"/>'
+                                            + '<input onclick="deleteFee(this)"  type="button" value="删除" class="btn_delete" />');
+                                    var tr = $("<tr id='tr'></tr>")
+                                            .append(costId)
+                                            .append(costName)
+                                            .append(base_duration)
+                                            .append(base_cost)
+                                            .append(unit_cost)
+                                            .append(creaTime)
+                                            .append(starTime)
+                                            .append(status)
+                                            .append(p);
+                                    $("#datalist").append(tr)
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+    }
+    function sortWhenlong(btnObj) {
+        if (btnObj.className == "sort_asc")
+            btnObj.className = "sort_desc";
+        else {
+            btnObj.className = "sort_asc";
+        }
+        if (btnObj.className == "sort_desc") {
+            $("#datalist tbody").html("");
+            $.ajax({
+                url: "findCostAsc",
+                success: function (result) {
+                    if (result.code == "0") {
+                        for (var i = 0; i < result.data.length; i++) {
+                            var cost = result.data[i];
+                            if (null != cost) {
+                                var costId = $("<td></td>").text(cost.costId);
+                                var costName = $("<td id='costName' onclick='fee_detail(this)'></td>").text(cost.costName);
+                                var base_duration = $("<td></td>").text(cost.base_duration);
+                                var base_cost = $("<td></td>").text(cost.base_cost);
+                                var unit_cost = $("<td></td>").text(cost.unit_cost + ".00 元/小时");
+                                var creaTime = $("<td></td>").text(cost.creaTime);
+                                var starTime = $("<td></td>").text(cost.starTime);
+                                var status = $("<td></td>").text(cost.status);
+                                if (cost.status == "1") {
+                                    var tr = $("<tr id='tr'></tr>")
+                                            .append(costId)
+                                            .append(costName)
+                                            .append(base_duration)
+                                            .append(base_cost)
+                                            .append(unit_cost)
+                                            .append(creaTime)
+                                            .append(starTime)
+                                            .append(status);
+                                    $("#datalist").append(tr)
+                                } else {
+                                    var p = $("<td></td>").append('<input type="button" value="启用" class="btn_start" onclick="startFee()"/>'
+                                            + '<input id="update" type="button" onclick="updateCost(this)" value="修改" class="btn_modify"/>'
+                                            + '<input onclick="deleteFee(this)"  type="button" value="删除" class="btn_delete" />');
+                                    var tr = $("<tr id='tr'></tr>")
+                                            .append(costId)
+                                            .append(costName)
+                                            .append(base_duration)
+                                            .append(base_cost)
+                                            .append(unit_cost)
+                                            .append(creaTime)
+                                            .append(starTime)
+                                            .append(status)
+                                            .append(p);
+                                    $("#datalist").append(tr)
+                                }
+                            }
+                        }
+                    }
+
+                }
+            })
+        } else
+            $.ajax({
+                url:"findCostDesc",
+                success:function (result) {
+                    $("#datalist tbody").html("");
+                    if (result.code == "0") {
+                        for (var i = 0; i < result.data.length; i++) {
+                            var cost = result.data[i];
+                            if (null != cost) {
+                                var costId = $("<td></td>").text(cost.costId);
+                                var costName = $("<td id='costName' onclick='fee_detail(this)'></td>").text(cost.costName);
+                                var base_duration = $("<td></td>").text(cost.base_duration);
+                                var base_cost = $("<td></td>").text(cost.base_cost);
+                                var unit_cost = $("<td></td>").text(cost.unit_cost + ".00 元/小时");
+                                var creaTime = $("<td></td>").text(cost.creaTime);
+                                var starTime = $("<td></td>").text(cost.starTime);
+                                var status = $("<td></td>").text(cost.status);
+                                if (cost.status == "1") {
+                                    var tr = $("<tr id='tr'></tr>")
+                                            .append(costId)
+                                            .append(costName)
+                                            .append(base_duration)
+                                            .append(base_cost)
+                                            .append(unit_cost)
+                                            .append(creaTime)
+                                            .append(starTime)
+                                            .append(status);
+                                    $("#datalist").append(tr)
+                                } else {
+                                    var p = $("<td></td>").append('<input type="button" value="启用" class="btn_start" onclick="startFee()"/>'
+                                            + '<input id="update" type="button" onclick="updateCost(this)" value="修改" class="btn_modify"/>'
+                                            + '<input onclick="deleteFee(this)"  type="button" value="删除" class="btn_delete" />');
+                                    var tr = $("<tr id='tr'></tr>")
+                                            .append(costId)
+                                            .append(costName)
+                                            .append(base_duration)
+                                            .append(base_cost)
+                                            .append(unit_cost)
+                                            .append(creaTime)
+                                            .append(starTime)
+                                            .append(status)
+                                            .append(p);
+                                    $("#datalist").append(tr)
+                                }
+                            }
+                        }
+                    }
+                }
+            })
+    }
 
 </script>
 </body>

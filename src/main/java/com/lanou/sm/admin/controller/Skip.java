@@ -90,6 +90,11 @@ public class Skip {
         return "fee/fee_add";
     }
 
+    @RequestMapping("loginHtml")
+    public String loginHtml(){
+        return "login";
+    }
+
 
 
 

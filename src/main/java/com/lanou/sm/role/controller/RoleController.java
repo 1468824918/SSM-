@@ -22,6 +22,7 @@ import java.util.List;
 public class RoleController {
     @Resource(name = "roleServices")
     private RoleService roleService;
+    private RoleInfo roleInfo;
 
     /**
      * 角色查询
@@ -73,11 +74,34 @@ public class RoleController {
         return s;
     }
 
+    /**
+     * 查询权限
+     * @return
+     */
     @RequestMapping("findModuleInfo")
     @ResponseBody
     public AjaxResult findModule_Info(){
         return new AjaxResult(roleService.findModule_Info());
     }
 
+    @RequestMapping("skipRole_modi")
+    @ResponseBody
+    public String admin_modi(RoleInfo roleInfo){
+        this.roleInfo = roleInfo;
+        return "success";
+    }
 
+    @RequestMapping("lookRole_modi")
+    @ResponseBody
+    public AjaxResult lookRole_modi(){
+        return new AjaxResult(roleInfo);
+    }
+
+    public RoleInfo getRoleInfo() {
+        return roleInfo;
+    }
+
+    public void setRoleInfo(RoleInfo roleInfo) {
+        this.roleInfo = roleInfo;
+    }
 }

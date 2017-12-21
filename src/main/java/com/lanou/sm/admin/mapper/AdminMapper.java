@@ -77,6 +77,19 @@ public interface AdminMapper {
 
 
 
+    //根据adminId查询
+    Admin findAdminBySession(Admin admin);
+
+
+
+
+
+    int updatePiAdmin(Admin admin);
+
+
+    int updatePassword(Admin admin);
+
+
 
 
     //分页
@@ -84,8 +97,4 @@ public interface AdminMapper {
 
     //查询有多少条数据
     PageBean<Admin> findAdminByPage();
-
-
-
-
 }

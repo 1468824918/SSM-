@@ -170,6 +170,49 @@ public class AdminController {
         return new AjaxResult(adminServices.findAllRole_info());
     }
 
+    /**
+     * 个人信息
+     * @param session
+     * @return
+     */
+    @RequestMapping("pi")
+    @ResponseBody
+    public AjaxResult findAdminBySession(HttpSession session){
+        Admin admin = (Admin) session.getAttribute("admin");
+        return new AjaxResult(adminServices.findAdminBySession(admin));
+    }
+
+    /**
+     * 修改个人信息
+     * @param admin
+     * @return
+     */
+    @RequestMapping("updatePiAdmin")
+    @ResponseBody
+    public String updatePiAdmin(Admin admin){
+        String s = adminServices.updatePiAdmin(admin);
+        return s;
+    }
+
+    /**
+     * 修改密码
+     * @param oldPassword
+     * @param password
+     * @param againPassword
+     * @param session
+     * @return
+     */
+    @RequestMapping("updatePassword")
+    @ResponseBody
+    public String updatePassword(String oldPassword,String password,String againPassword,HttpSession session){
+        String s = adminServices.updatePassword(oldPassword, password, againPassword, session);
+        return s;
+    }
+
+    @RequestMapping("")
+
+
+
 
     public Admin getAdmin() {
         return admin1;

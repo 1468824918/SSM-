@@ -74,4 +74,10 @@ public class RoleMapperTest {
         RoleInfo info = new RoleInfo(314,"苏烈");
         roleMapper.updateRoleInfoById(info);
     }
+
+    @Test
+    public void findRoleInfoAndModuleInfo() throws Exception {
+        RoleInfo info = new RoleInfo(303,"苏烈");
+        roleMapper.findRoleInfoAndModuleInfo(info);
+    }
 }

@@ -96,9 +96,24 @@
     function updateRole() {
         $("#datalist tr").click(function () {
             var td = $(this).find("td");
-            var data = td.eq(1).html();
-            var d = td.eq(0).html();
-        window.location ='role_modi.html?name='+data + "?" +d ;
+            var roleName = td.eq(1).html();
+            var roleId = td.eq(0).html();
+            var moduleName = td.eq(2).html();
+//        window.location ='role_modi.html?name='+data + "?" +d ;
+            $.ajax({
+                url:"skipRole_modi",
+                data:{
+                    "roleId":roleId,
+                    "roleName":roleName,
+                    "moduleInfo.moduleName":moduleName
+                },
+                success:function (result) {
+                    alert(result)
+                    if (result=="success"){
+                        window.location = 'role_modi'
+                    }
+                }
+            })
         });
     }
     //删除角色

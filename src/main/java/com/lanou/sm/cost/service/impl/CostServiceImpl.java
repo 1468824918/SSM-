@@ -44,7 +44,18 @@ public class CostServiceImpl implements CostService {
     }
 
     @Override
-    public List<Cost> findCostTime() {
-        return costMapper.findCostTime();
+    public List<Cost> findCostAsc() {
+        return costMapper.findCostAsc();
     }
+
+    @Override
+    public List<Cost> findCostTimeDesc() {
+        return costMapper.findCostTimeDesc();
+    }
+
+    @Override
+    public List<Cost> findCostTimeAsc() {
+        return costMapper.findCostTimeAsc();
+    }
+
 }

@@ -159,4 +159,10 @@ public class AdminMapperTest {
         System.out.println(adminByPage);
     }
 
+    @Test
+    public void findAdminBySession() throws Exception {
+        Admin admin = new Admin(5000,"小乔","123","Xiaoqiao","123456789","213345@qq.com",new Date());
+        adminMapper.findAdminBySession(admin);
+    }
+
 }

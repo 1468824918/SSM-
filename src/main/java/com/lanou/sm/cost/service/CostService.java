@@ -18,5 +18,9 @@ public interface CostService {
 
     List<Cost> findCostDesc();
 
-    List<Cost> findCostTime();
+    List<Cost> findCostAsc();
+
+    List<Cost> findCostTimeDesc();
+
+    List<Cost> findCostTimeAsc();
 }

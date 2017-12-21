@@ -4,6 +4,7 @@ import com.lanou.sm.admin.domain.Admin;
 import com.lanou.sm.admin.domain.AdminRole;
 import com.lanou.sm.admin.mapper.AdminMapper;
 import com.lanou.sm.admin.service.AdminService;
+import com.lanou.sm.admin.utils.PageBean;
 import com.lanou.sm.role.domain.ModuleInfo;
 import com.lanou.sm.role.domain.RoleInfo;
 import com.lanou.sm.role.mapper.RoleMapper;
@@ -45,6 +46,7 @@ public class AdminServiceImpl implements AdminService {
         } else if ("".equals(code) || !code.equalsIgnoreCase(codes)) {
             return "codeError";
         }
+        session.setAttribute("admin",admins);
         return "index";
     }
 
@@ -94,7 +96,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public String deleteAdmin(Admin admin) {
-        List<AdminRole> adminAndRole = adminMapper.findAdminAndRole(admin);
         adminMapper.deleteAdmin_role(admin);
         adminMapper.deleteAdmin(admin);
         return "success";
@@ -118,7 +119,6 @@ public class AdminServiceImpl implements AdminService {
         } else if (!matchers.matches()) {
             return "emailError";
         } else {
-            List<AdminRole> adminRoleList = adminMapper.findAdminAndRole(admin);
             adminMapper.deleteAdmin_role(admin);
 
 
@@ -137,7 +137,7 @@ public class AdminServiceImpl implements AdminService {
     }
 
 
-    
+
     @Override
     public List<ModuleInfo> findModule_info() {
         return adminMapper.findModule_info();
@@ -152,6 +152,42 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public List<RoleInfo> findAllRole_info() {
         return adminMapper.findAllRole_info();
+    }
+
+    @Override
+    public Admin findAdminBySession(Admin admin) {
+        return adminMapper.findAdminBySession(admin);
+    }
+
+    @Override
+    public String updatePiAdmin(Admin admin) {
+        adminMapper.updatePiAdmin(admin);
+        return "success";
+    }
+
+    @Override
+    public String updatePassword(String oldPassword, String password, String againPassword, HttpSession session) {
+        Admin admin = (Admin) session.getAttribute("admin");
+        if ("".equals(oldPassword)||"".equals(password)||"".equals(againPassword)){
+            return "error";
+        }else if (!oldPassword.equals(admin.getPassword())){
+            return "error";
+        }else if (!password.equals(againPassword)){
+            return "error";
+        }
+        admin.setPassword(password);
+        adminMapper.updatePassword(admin);
+        return "success";
+    }
+
+    @Override
+    public List<Admin> findAdminAndStartAndPageSize(int startPos, int pageSize) {
+        return adminMapper.findAdminAndStartAndPageSize(startPos,pageSize);
+    }
+
+    @Override
+    public PageBean<Admin> findAdminByPage() {
+        return adminMapper.findAdminByPage();
     }
 
 }

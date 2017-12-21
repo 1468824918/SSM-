@@ -84,22 +84,22 @@
     <span>版权所有(C)云科技有限公司 </span>
 </div>
 <script type="application/javascript">
-    var str = window.location.search;
-    //location.search是从当前URL的?号开始的字符串
-    if (str.indexOf(name) != -1) {
-        var pos_start = str.indexOf(name) + name.length + 1;
-        var pos_end = str.indexOf("&amp;", pos_start);
-        if (pos_end == -1) {
-            var url = decodeURI(window.location);
-            var tmp1 = url.split("?")[1];
-            var tmp2 = url.split("?")[2];
-
-            document.getElementById("inp").value = decodeURI(tmp1.slice(5, 20));
-        } else {
-            alert("没有此值~~");
-        }
-    }
-
+    //    var str = window.location.search;
+    //    //location.search是从当前URL的?号开始的字符串
+    //    if (str.indexOf(name) != -1) {
+    //        var pos_start = str.indexOf(name) + name.length + 1;
+    //        var pos_end = str.indexOf("&amp;", pos_start);
+    //        if (pos_end == -1) {
+    //            var url = decodeURI(window.location);
+    //            var tmp1 = url.split("?")[1];
+    //            var tmp2 = url.split("?")[2];
+    //
+    //            document.getElementById("inp").value = decodeURI(tmp1.slice(5, 20));
+    //        } else {
+    //            alert("没有此值~~");
+    //        }
+    //    }
+    var roleId = ""
     $("#but").click(function () {
         var checkID = [];
         $("input[type='checkbox']:checked").each(function (i) {
@@ -112,7 +112,7 @@
             type: "POST",
             data: {
                 "roleName": roleName,
-                "roleId": tmp2,
+                "roleId": roleId,
                 "moduleId": [checkID],
             },
             traditional: true,
@@ -136,10 +136,25 @@
                 if (result.code == "0") {
                     for (var i = 0; i < result.data.length; i++) {
                         var moduleInfo = result.data[i];
-                        var  moduleName =$("<li></li>").append("<input id='moduleId' type='checkbox' value='"+moduleInfo.moduleId+"'/>" + moduleInfo.moduleName)
+                        var moduleName = $("<li></li>").append("<input id='moduleId' type='checkbox' value='" + moduleInfo.moduleId + "'/>" + moduleInfo.moduleName)
                         $("#ul").append(moduleName)
+//                        $("#moduleId").prop("checked",true)
                     }
                 }
+            }
+        })
+
+        $.ajax({
+            url: "lookRole_modi",
+            success: function (result) {
+                console.log(result)
+                document.getElementById("inp").value = result.data.roleName;
+                roleId = result.data.roleId
+                var d = document.getElementById("ul").getElementsByTagName("li")
+                console.log(d.length)
+//                for(var i=0;i<d.length;i++){
+//                    alert(d[i].innerText)
+//                }
             }
         })
     })

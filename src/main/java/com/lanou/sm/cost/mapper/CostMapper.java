@@ -25,7 +25,11 @@ public interface CostMapper {
     //基费
     List<Cost> findCostDesc();
 
+    List<Cost> findCostAsc();
+
     //时长
-    List<Cost> findCostTime();
+    List<Cost> findCostTimeDesc();
+
+    List<Cost> findCostTimeAsc();
 
 }
