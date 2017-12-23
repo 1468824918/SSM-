@@ -218,6 +218,7 @@
         $("#datalist tr").click(function () {
             var td = $(this).find("td");
             var costId = td.eq(0).html();
+            alert(costId)
             $.ajax({
                 url: "fee_detail",
                 data: {

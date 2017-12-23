@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lanou.sm.account.mapper.AccountMapper">
+    <resultMap id="BaseResultMap" type="Account">
+        <id column="account_id" property="accountId"/>
+        <result column="recommender_id" property="recommenderId"/>
+        <result column="login_name" property="loginName"/>
+        <result column="login_passwd" property="loginPasswd"/>
+        <result column="status" property="status"/>
+        <result column="create_date" property="createDate"/>
+        <result column="pause_date" property="pauseDate"/>
+        <result column="close_date" property="closeDate"/>
+        <result column="real_name" property="realName"/>
+        <result column="idcard_no" property="idcardNo"/>
+        <result column="birthdate" property="birthdate"/>
+        <result column="gender" property="gender"/>
+        <result column="occupation" property="occupation"/>
+        <result column="telephone" property="telephone"/>
+        <result column="email" property="email"/>
+        <result column="mailaddress" property="mailaddress"/>
+        <result column="zipcode" property="zipcode"/>
+        <result column="qq" property="qq"/>
+        <result column="last_login_time" property="lastLoginTime"/>
+        <result column="last_login_ip" property="lastLoginIp"/>
+    </resultMap>
+    <update id="updateStruts">
+        UPDATE account
+        <set>
+            <if test="status == 0">
+                <if test="status">status=#{status},</if>
+            </if>
+            <if test="status== 1">
+                <if test="status">status=#{status},</if>
+            </if>
+        </set>
+        where account_id=#{accountId}
+    </update>
+
+
+    <!--查询全部账务-->
+    <select id="findAccount" resultType="com.lanou.sm.account.domain.Account" resultMap="BaseResultMap">
+        SELECT
+            a.account_id      account_id,
+            a.real_name       real_name,
+            a.idcard_no       idcard_no,
+            a.login_name      login_name,
+            a.status          status,
+            a.create_date     create_date,
+            a.last_login_time last_login_time
+        FROM account a
+    </select>
+
+
+</mapper>

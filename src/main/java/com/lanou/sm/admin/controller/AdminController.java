@@ -1,5 +1,6 @@
 package com.lanou.sm.admin.controller;
 
+import com.lanou.sm.account.domain.Account;
 import com.lanou.sm.admin.domain.Admin;
 import com.lanou.sm.admin.service.AdminService;
 import com.lanou.sm.admin.utils.AjaxResult;
@@ -209,7 +210,27 @@ public class AdminController {
         return s;
     }
 
-    @RequestMapping("")
+    /**
+     * 分页
+     * @param startPos
+     * @param pageSize
+     * @return
+     */
+    @RequestMapping("findAdminAndStartAndPageSize")
+    @ResponseBody
+    public String findAdminAndStartAndPageSize(int startPos,int pageSize){
+        List<Admin> adminAndStartAndPageSize = adminServices.findAdminAndStartAndPageSize(startPos, pageSize);
+        return "111";
+    }
+
+    @RequestMapping("findAdminByPage")
+    @ResponseBody
+    public String findAdminByPage(){
+        return "111";
+    }
+
+
+
 
 
 

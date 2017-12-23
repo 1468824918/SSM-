@@ -6,7 +6,7 @@ import java.util.List;
  * 分页的 Bean
  * 1.当前页码:pageCode , pc
  * 2.总页数: totalPage tp 总记录数/每页记录数
- * 3.总记录数: totalRecord tr dao: 查询 select count(*)
+ * 3.总记录数: totalRecord tr mapper: 查询 select count(*)
  * 4.每页记录数: pageSize ps 10
  * 5.当前页的数据 beanList bl
  * 6.url

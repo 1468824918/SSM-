@@ -1,5 +1,6 @@
 package com.lanou.sm.admin.service;
 
+import com.lanou.sm.account.domain.Account;
 import com.lanou.sm.admin.domain.Admin;
 import com.lanou.sm.admin.utils.PageBean;
 import com.lanou.sm.role.domain.ModuleInfo;
@@ -36,8 +37,6 @@ public interface AdminService {
     String updatePiAdmin(Admin admin);
 
     String updatePassword(String oldPassword,String password,String againPassword,HttpSession session);
-
-
 
     //分页
     List<Admin> findAdminAndStartAndPageSize(int startPos,int pageSize);
